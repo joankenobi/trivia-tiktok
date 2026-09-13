@@ -19,22 +19,27 @@ class EventEnvelope(BaseModel):
     type: str  # "comment" | "gift" | "like" | "follow"
     timestamp: str  # ISO 8601
     user: UserInfo
+    # Per-event payload. Lives on the BASE class on purpose: fields declared on
+    # subclasses are dropped when pydantic serializes a list typed as the base
+    # (e.g. Batch.events: list[EventEnvelope]), which silently removed `data`
+    # from every batch and made the receiver 422 on the "data required" rule.
+    data: dict = Field(default_factory=dict)
 
 
 class CommentEvent(EventEnvelope):
-    data: dict = Field(default_factory=dict)  # {"message": "..."}
+    """data: {"message": "..."}"""
 
 
 class GiftEvent(EventEnvelope):
-    data: dict = Field(default_factory=dict)  # {"gift_name", "diamonds", "repeat_count", "streak"}
+    """data: {"gift_name", "diamonds", "repeat_count"}"""
 
 
 class LikeEvent(EventEnvelope):
-    data: dict = Field(default_factory=dict)  # {"like_count", "delta"} — delta computed client-side
+    """data: {"like_count", "delta"} — delta computed client-side"""
 
 
 class FollowEvent(EventEnvelope):
-    data: dict = Field(default_factory=dict)  # optional extras
+    """data: {} (contract: maxProperties 0)"""
 
 
 class Batch(BaseModel):

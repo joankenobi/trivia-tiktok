@@ -205,8 +205,8 @@ python -m client
 - [x] Phase 1: TikTok client (models → normalizers → buffer → sender → main)
 - [x] Phase 1 verified in dry-run (synthetic smoke test PASS — JSONL batches in data/batches/)
 - [x] Phase 1 live validation: real live @braingame.live (room 7684638051930344214), batches flowing every ~2s (comments verified; gifts/likes/follows pending a live that produces them)
-- [ ] Phase 2: FastAPI receiver + persistence
-- [ ] End-to-end: client POSTs real batches to FastAPI
+- [x] Phase 2: FastAPI receiver + persistence
+- [x] End-to-end: client POSTs real batches to FastAPI (validated live 2026-09-13)
 
 ### Notes (verified against installed TikTokLive 7.0.1)
 
@@ -215,3 +215,16 @@ python -m client
 - `streaking` property is real in v7: False for non-streakable gifts, `not repeat_end` for streakables → normalizer streak rule is correct.
 - No `stream_id` exposed in v7; stream key falls back to `str(room_id)`.
 - Run: `.\.venv\Scripts\python.exe -m client` (or `python -m client` with venv active). Smoke test: `.\.venv\Scripts\python.exe tools\smoke_test.py`.
+
+### Fixes found during first live E2E (2026-09-13)
+
+- `API_ENDPOINT` may contain `{room_id}` — `HttpSender.send()` substitutes it
+  per batch (`batch.room_id` or `batch.stream_id` fallback). README documented
+  this but the code never implemented it; without the fix the receiver bound
+  the literal `{room_id}` path segment and rejected the batch.
+- `data` must live on the **base** `EventEnvelope`, not on the event subclasses:
+  pydantic v2 serializes `Batch.events: list[EventEnvelope]` using the declared
+  (base) type, so subclass-only fields were silently dropped and every POST was
+  rejected with `422 data: Field required` (the contract requires per-type
+  `data` on every event).
+- Windows convenience: `capturer\run_capturer.bat` and `service\run_service.bat`.
