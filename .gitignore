@@ -1,0 +1,53 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.wheel/
+
+# --- Virtual environments (one per module: capturer/, service/, etc.) ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Secrets & local config ---
+# Keep .env.example tracked, ignore all real .env files
+.env
+.env.*
+!.env.example
+
+# --- Generated data (dry-run JSONL batches, downloaded media, etc.) ---
+data/batches/
+capturer/data/
+service/data/
+*.jsonl
+
+# --- Tooling caches & reports ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+
+# --- Editor / OS ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+logs/

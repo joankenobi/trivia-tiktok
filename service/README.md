@@ -1,0 +1,3 @@
+# FastAPI Service (Phase 2)
+
+This directory is the home of the Phase 2 receiver microservice, which will expose `POST /api/v1/lives/{room_id}/batches` to accept the batches emitted by `../capturer`. When implemented, it will run in its **own venv** (created inside `service/`) and define **its own pydantic models** mirroring `../contract/batch.schema.json` — it will never import anything from the capturer, and the capturer will never import from it. Nothing has been implemented here yet; this README is a placeholder until Phase 2 begins.

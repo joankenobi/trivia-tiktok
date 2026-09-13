@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/tiktoklives/contracts/batch.schema.json",
+  "title": "TikTokLiveBatch",
+  "description": "One HTTP batch POSTed by the TikTok capturer to the FastAPI receiver. Single source of truth: both sides define their own pydantic models against this schema.",
+  "type": "object",
+  "required": ["version", "started_at", "ended_at", "events"],
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "room_id": { "type": ["string", "null"] },
+    "stream_id": { "type": ["string", "null"] },
+    "started_at": { "type": "string", "format": "date-time", "description": "ISO 8601 of the first event in the batch" },
+    "ended_at": { "type": "string", "format": "date-time", "description": "ISO 8601 when the batch was built" },
+    "events": { "type": "array", "items": { "$ref": "#/$defs/event" } }
+  },
+  "$defs": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "unique_id": { "type": ["string", "null"] },
+        "nickname": { "type": ["string", "null"] },
+        "profile_picture_url": { "type": ["string", "null"], "description": "TikTok avatar URL, not bytes" }
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": ["type", "timestamp", "user"],
+      "properties": {
+        "type": { "enum": ["comment", "gift", "like", "follow"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "user": { "$ref": "#/$defs/user" },
+        "data": { "type": "object" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "comment" } } },
+          "then": { "properties": { "data": { "required": ["message"], "properties": { "message": { "type": "string" } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "gift" } } },
+          "then": { "properties": { "data": { "required": ["gift_name", "repeat_count", "diamonds"], "properties": { "gift_name": { "type": "string" }, "repeat_count": { "type": "integer" }, "diamonds": { "type": ["integer", "null"] } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "like" } } },
+          "then": { "properties": { "data": { "required": ["like_count", "delta"], "properties": { "like_count": { "type": "integer" }, "delta": { "type": "integer" } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "follow" } } },
+          "then": { "properties": { "data": { "type": "object", "maxProperties": 0 } } }
+        }
+      ]
+    }
+  }
+}
