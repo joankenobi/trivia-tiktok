@@ -88,6 +88,7 @@ MAX_BATCH_EVENTS = 500
 class Batch(BaseModel):
     version: Literal[1] = 1
     room_id: str | None = None
+    host_username: str | None = None
     stream_id: str | None = None
     started_at: datetime
     ended_at: datetime

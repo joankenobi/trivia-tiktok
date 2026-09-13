@@ -60,6 +60,7 @@ async def main() -> None:
         interval_seconds=settings.batch_interval_seconds,
         max_events=settings.batch_max_events,
         sender=create_sender(settings),
+        host_username=settings.tiktok_username,
     )
     normalizer = TikTokNormalizer()
 

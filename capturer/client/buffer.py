@@ -24,10 +24,17 @@ class BatchBuffer:
     the queue length reached ``max_events`` — whichever comes first.
     """
 
-    def __init__(self, interval_seconds: int, max_events: int, sender: Sender) -> None:
+    def __init__(
+        self,
+        interval_seconds: int,
+        max_events: int,
+        sender: Sender,
+        host_username: str | None = None,
+    ) -> None:
         self.interval_seconds = interval_seconds
         self.max_events = max_events
         self.sender = sender
+        self.host_username = host_username
         self.room_id: str | None = None
         self.stream_id: str | None = None
         self._events: list[EventEnvelope] = []
@@ -54,6 +61,7 @@ class BatchBuffer:
             started_at = datetime.now(timezone.utc).isoformat()
         return Batch(
             room_id=self.room_id,
+            host_username=self.host_username,
             stream_id=self.stream_id,
             started_at=started_at,
             ended_at=datetime.now(timezone.utc).isoformat(),

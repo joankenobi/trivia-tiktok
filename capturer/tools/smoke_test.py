@@ -37,7 +37,7 @@ async def main() -> int:
     with tempfile.TemporaryDirectory() as tmp:
         output_dir = Path(tmp) / "data-batches-test"
         sender = DryRunSender(output_dir)
-        buffer = BatchBuffer(interval_seconds=0.05, max_events=3, sender=sender)
+        buffer = BatchBuffer(interval_seconds=0.05, max_events=3, sender=sender, host_username="@smoke_host")
         buffer.room_id = "test123"
         buffer.stream_id = "test123"
 
@@ -63,6 +63,7 @@ async def main() -> int:
             assert payload["version"] == 1, payload
             assert payload["room_id"] == "test123", payload
             assert payload["stream_id"] == "test123", payload
+            assert payload["host_username"] == "@smoke_host", payload
 
         all_types = {e["type"] for line in batches for e in line["events"]}
         total_events = sum(len(line["events"]) for line in batches)

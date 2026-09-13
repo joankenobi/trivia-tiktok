@@ -60,6 +60,9 @@ class Stream(Base):
     # Normalized: when the payload omits stream_id it falls back to room_id,
     # so the unique key never sees NULLs (SQLite/PG differ on NULL uniqueness).
     stream_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    # TikTok username of the live host/owner. Optional; the newest non-null
+    # batch value wins on upsert because the owner can rename the account.
+    host_username: Mapped[str | None] = mapped_column(String(255), nullable=True)
     first_seen: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     last_seen: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     batch_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)

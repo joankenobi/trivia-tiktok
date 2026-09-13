@@ -8,6 +8,7 @@
   "properties": {
     "version": { "type": "integer", "const": 1 },
     "room_id": { "type": ["string", "null"] },
+    "host_username": { "type": ["string", "null"], "description": "TikTok username of the live host/owner (e.g. @braingame.live). Optional; the newest non-null value wins on stream upsert because the name can change." },
     "stream_id": { "type": ["string", "null"] },
     "started_at": { "type": "string", "format": "date-time", "description": "ISO 8601 of the first event in the batch" },
     "ended_at": { "type": "string", "format": "date-time", "description": "ISO 8601 when the batch was built" },

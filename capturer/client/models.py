@@ -45,6 +45,7 @@ class FollowEvent(EventEnvelope):
 class Batch(BaseModel):
     version: int = 1
     room_id: str | None = None
+    host_username: str | None = None
     stream_id: str | None = None
     started_at: str
     ended_at: str

@@ -22,9 +22,11 @@ at most `MAX_BATCH_EVENTS` events per payload (422 when exceeded) and at most
 ## Schema
 
 Mirrors `contract/batch.schema.json`: `version` (must be `1`), optional
-`room_id`/`stream_id`, ISO 8601 `started_at`/`ended_at`, and `events[]` whose
-`type` must be one of `comment | gift | like | follow`. Per-type `data`
-requirements are enforced:
+`room_id`/`stream_id`/`host_username`, ISO 8601 `started_at`/`ended_at`, and
+`events[]` whose `type` must be one of `comment | gift | like | follow`.
+`host_username` is the live owner's TikTok handle (optional; the newest non-null
+value wins on stream upsert because the owner can rename the account).
+Per-type `data` requirements are enforced:
 
 - `comment` → `data.message` (string)
 - `gift` → `data.gift_name`, `data.repeat_count`, `data.diamonds`

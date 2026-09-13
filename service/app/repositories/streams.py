@@ -13,12 +13,17 @@ from app.models.entities import Stream
 
 
 async def get_or_create_stream(
-    db: AsyncSession, room_id: str, stream_id: str | None, first_event_at: datetime
+    db: AsyncSession,
+    room_id: str,
+    stream_id: str | None,
+    first_event_at: datetime,
+    host_username: str | None = None,
 ) -> Stream:
     """Find the stream row for (room_id, stream_id) or create it.
 
     ``stream_id`` is normalized to ``room_id`` when absent so the unique key
     never contains NULLs (NULL uniqueness differs between SQLite and Postgres).
+    A non-null ``host_username`` seeds the row on creation.
     """
     key = stream_id or room_id
     stream_stmt = select(Stream).where(
@@ -32,6 +37,7 @@ async def get_or_create_stream(
         stream = Stream(
             room_id=room_id,
             stream_id=key,
+            host_username=host_username,
             first_seen=first_event_at,
             last_seen=first_event_at,
             batch_count=0,

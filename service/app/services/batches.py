@@ -67,7 +67,13 @@ async def ingest_batch(db: AsyncSession, room_id: str, batch: Batch) -> IngestRe
     for event in batch.events:
         event.timestamp = to_naive_utc(event.timestamp)
 
-    stream = await get_or_create_stream(db, room_id, batch.stream_id, batch.started_at)
+    stream = await get_or_create_stream(
+        db, room_id, batch.stream_id, batch.started_at, host_username=batch.host_username
+    )
+    # Newest non-null host_username wins (the live owner can rename the
+    # account mid-capture). A null batch value leaves the stored one alone.
+    if batch.host_username is not None:
+        stream.host_username = batch.host_username
     user_cache: dict = {}
 
     for event in batch.events:

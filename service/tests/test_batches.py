@@ -100,6 +100,43 @@ async def test_stream_id_falls_back_to_room_id(client, db_session):
     assert stream.stream_id == "room_123"
 
 
+async def test_host_username_persisted_on_stream(client, db_session):
+    batch = make_batch([mixed_events()[0]], host_username="@host.one")
+    assert (await client.post(BATCH_URL, json=batch)).status_code == 200
+
+    stream = (await db_session.execute(select(Stream))).scalar_one()
+    assert stream.host_username == "@host.one"
+
+
+async def test_host_username_latest_wins(client, db_session):
+    assert (await client.post(
+        BATCH_URL, json=make_batch([mixed_events()[0]], host_username="@host.one")
+    )).status_code == 200
+    assert (await client.post(
+        BATCH_URL, json=make_batch([mixed_events()[1]], host_username="@host.renamed")
+    )).status_code == 200
+
+    assert (await db_session.scalar(select(func.count()).select_from(Stream))) == 1
+    stream = (await db_session.execute(select(Stream))).scalar_one()
+    assert stream.host_username == "@host.renamed"
+
+
+async def test_host_username_absent_keeps_existing(client, db_session):
+    assert (await client.post(
+        BATCH_URL, json=make_batch([mixed_events()[0]], host_username="@host.one")
+    )).status_code == 200
+
+    bare = make_batch([mixed_events()[1]])
+    bare.pop("host_username", None)
+    assert (await client.post(BATCH_URL, json=bare)).status_code == 200
+
+    nulled = make_batch([mixed_events()[2]], host_username=None)
+    assert (await client.post(BATCH_URL, json=nulled)).status_code == 200
+
+    stream = (await db_session.execute(select(Stream))).scalar_one()
+    assert stream.host_username == "@host.one"
+
+
 async def test_unknown_event_type_rejected(client):
     events = [make_event("mystery", data={})]
     res = await client.post(BATCH_URL, json=make_batch(events))
