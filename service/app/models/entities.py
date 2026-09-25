@@ -13,6 +13,7 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -160,3 +161,27 @@ class Follow(Base):
 
     user: Mapped[User] = relationship(back_populates="follows")
     stream: Mapped[Stream] = relationship(back_populates="follows")
+
+
+class EventIndex(Base):
+    """Global monotonic cursor index over per-type event tables.
+
+    The four event tables (``comments``, ``gifts``, ``likes``, ``follows``)
+    have independent autoincrement ids, so no single column there can serve as
+    a shared cursor. ``EventIndex`` assigns one global ``id`` per event inside
+    the SAME transaction that inserts the event, giving readers a lossless,
+    duplicate-free ``since``/``next_cursor`` pagination key per stream.
+    """
+
+    __tablename__ = "event_index"
+    __table_args__ = (
+        # Serves ``WHERE stream_id = ? AND id > ? ORDER BY id LIMIT ?``.
+        Index("ix_event_index_stream_id_id", "stream_id", "id"),
+    )
+
+    id: Mapped[int] = mapped_column(_ID, primary_key=True)
+    stream_id: Mapped[int] = mapped_column(
+        ForeignKey("streams.id", ondelete="CASCADE"), nullable=False
+    )
+    kind: Mapped[str] = mapped_column(String(16), nullable=False)
+    entity_id: Mapped[int] = mapped_column(_ID, nullable=False)

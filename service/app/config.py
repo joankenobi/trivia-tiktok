@@ -29,6 +29,10 @@ class Settings:
     max_batch_events: int = 500
     max_payload_bytes: int = 1_000_000
 
+    # A stream is reported as "active" while its most recent batch arrived no
+    # more than this many seconds ago.
+    active_stream_window_seconds: int = 30
+
     @classmethod
     def load(cls, env_path: Path | None = None) -> "Settings":
         """Load .env from the service root (or an explicit path) with defaults."""
@@ -43,6 +47,9 @@ class Settings:
             port=int(os.getenv("PORT", "8000")),
             max_batch_events=int(os.getenv("MAX_BATCH_EVENTS", "500")),
             max_payload_bytes=int(os.getenv("MAX_PAYLOAD_BYTES", "1000000")),
+            active_stream_window_seconds=int(
+                os.getenv("ACTIVE_STREAM_WINDOW_SECONDS", "30")
+            ),
         )
 
 
