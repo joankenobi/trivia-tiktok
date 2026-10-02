@@ -1,0 +1,12 @@
+# Runtime
+fastapi>=0.141.0
+uvicorn[standard]
+pydantic-settings
+SQLAlchemy[asyncio]>=2.0
+aiosqlite
+httpx
+
+# Tests
+pytest
+pytest-asyncio
+ruff

@@ -1,0 +1,123 @@
+[
+  {
+    "id": 1,
+    "text": "¿Cuál es la respuesta a la vida, el universo y todo lo demás?",
+    "category": "general",
+    "difficulty": "easy",
+    "options": ["24", "42", "7", "100"],
+    "correct": "B",
+    "explanation": "Es 42, de la Guía del Viajero Galáctico."
+  },
+  {
+    "id": 2,
+    "text": "¿Qué gas compone la mayor parte de la atmósfera terrestre?",
+    "category": "ciencia",
+    "difficulty": "easy",
+    "options": ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Argón"],
+    "correct": "B"
+  },
+  {
+    "id": 3,
+    "text": "¿Cuál es la capital de Francia?",
+    "category": "geografía",
+    "difficulty": "easy",
+    "options": ["Berlín", "Madrid", "Roma", "París"],
+    "correct": "D"
+  },
+  {
+    "id": 4,
+    "text": "¿Qué planeta es conocido como el planeta rojo?",
+    "category": "ciencia",
+    "difficulty": "medium",
+    "options": ["Venus", "Marte", "Júpiter", "Saturno"],
+    "correct": "B"
+  },
+  {
+    "id": 5,
+    "text": "¿Quién escribió '1984'?",
+    "category": "literatura",
+    "difficulty": "medium",
+    "options": ["Huxley", "Dick", "Orwell", "Bradbury"],
+    "correct": "C"
+  },
+  {
+    "id": 6,
+    "text": "¿Cuál es el animal terrestre más rápido?",
+    "category": "animales",
+    "difficulty": "medium",
+    "options": ["Gacela", "Antílope", "Cheetá", "Ñu"],
+    "correct": "C"
+  },
+  {
+    "id": 7,
+    "text": "¿En qué año llegó el Apolo 11 a la Luna?",
+    "category": "historia",
+    "difficulty": "hard",
+    "options": ["1968", "1970", "1971", "1969"],
+    "correct": "D"
+  },
+  {
+    "id": 8,
+    "text": "¿Cuál es el símbolo químico del oro?",
+    "category": "química",
+    "difficulty": "hard",
+    "options": ["Ag", "Pb", "Au", "Fe"],
+    "correct": "C"
+  },
+  {
+    "id": 9,
+    "text": "¿Qué elemento tiene número atómico 1?",
+    "category": "química",
+    "difficulty": "hard",
+    "options": ["Helio", "Litio", "Hidrógeno", "Boro"],
+    "correct": "C"
+  },
+  {
+    "id": 10,
+    "text": "¿Cuál es el océano más grande de la Tierra?",
+    "category": "geografía",
+    "difficulty": "hard",
+    "options": ["Atlántico", "Índico", "Ártico", "Pacífico"],
+    "correct": "D"
+  },
+  {
+    "id": 11,
+    "text": "¿Cuántos lados tiene un hexágono?",
+    "category": "matemáticas",
+    "difficulty": "easy",
+    "options": ["5", "6", "7", "8"],
+    "correct": "B"
+  },
+  {
+    "id": 12,
+    "text": "¿Quién pintó la Mona Lisa?",
+    "category": "arte",
+    "difficulty": "medium",
+    "options": ["Van Gogh", "Picasso", "Da Vinci", "Miguel Ángel"],
+    "correct": "C"
+  },
+  {
+    "id": 13,
+    "text": "¿Cuántos huesos tiene el cuerpo humano adulto?",
+    "category": "ciencia",
+    "difficulty": "hard",
+    "options": ["186", "206", "226", "246"],
+    "correct": "B"
+  },
+  {
+    "id": 14,
+    "text": "¿Cuál es el río más largo del mundo?",
+    "category": "geografía",
+    "difficulty": "medium",
+    "options": ["Amazonas", "Nilo", "Yangtsé", "Misisipi"],
+    "correct": "B"
+  },
+  {
+    "id": 15,
+    "text": "¿Qué lenguaje se habla en Brasil?",
+    "category": "general",
+    "difficulty": "easy",
+    "options": ["Español", "Portugués", "Inglés", "Francés"],
+    "correct": "B"
+  }
+]

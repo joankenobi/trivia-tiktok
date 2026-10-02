@@ -1,0 +1,135 @@
+:root {
+  --bg: #0e1116;
+  --panel: #161b22;
+  --panel-2: #1c2230;
+  --line: #2a3240;
+  --txt: #e6edf3;
+  --muted: #8b98a8;
+  --accent: #4f9cf9;
+  --ok: #3fb950;
+  --bad: #f85149;
+  --a: #4f9cf9;
+  --b: #f0883e;
+  --c: #a371f7;
+  --d: #3fb950;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font: 15px/1.5 ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+.bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; border-bottom: 1px solid var(--line); background: var(--panel);
+}
+.bar h1 { margin: 0; font-size: 18px; font-weight: 650; }
+.sub { color: var(--muted); font-weight: 400; margin-left: 8px; font-size: 14px; }
+.bar-right { display: flex; gap: 14px; align-items: center; }
+.link { color: var(--accent); text-decoration: none; font-size: 13px; }
+.link:hover { text-decoration: underline; }
+
+main { max-width: 940px; margin: 0 auto; padding: 22px; }
+
+.card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: 18px; margin-bottom: 18px;
+}
+.card h2 { margin: 0 0 14px; font-size: 15px; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+input {
+  background: var(--panel-2); border: 1px solid var(--line); color: var(--txt);
+  border-radius: 7px; padding: 9px 11px; font: inherit; font-size: 14px;
+}
+input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+/* Inside a label the flex gap already spaces things; the block margin would
+   only push the room-id hint out of line with its field. */
+label .hint { margin: -2px 0 0; }
+
+button {
+  background: var(--panel-2); border: 1px solid var(--line); color: var(--txt);
+  border-radius: 7px; padding: 9px 16px; font: inherit; font-size: 14px; cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .4; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #06121f; font-weight: 600; }
+
+.msg { color: var(--bad); font-size: 13px; min-height: 18px; margin: 10px 0 0; }
+
+.pill {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+  background: var(--panel-2); border: 1px solid var(--line); color: var(--muted);
+}
+.pill-idle { color: var(--muted); }
+.pill-ok { color: var(--ok); border-color: var(--ok); }
+.pill-open { color: var(--accent); border-color: var(--accent); }
+
+.board-head { display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+.label { color: var(--muted); font-size: 12px; text-transform: uppercase;
+  letter-spacing: .05em; }
+.label b { color: var(--txt); }
+.actions { display: flex; gap: 8px; }
+
+/* Countdown: tabular figures so the number does not jitter as digits change,
+   and a colour shift in the last seconds so the host can see it closing. */
+.countdown {
+  font-variant-numeric: tabular-nums; font-size: 20px; font-weight: 700;
+  color: var(--txt); margin-left: 10px;
+}
+.countdown-urgent { color: var(--accent); }
+
+.question { font-size: 20px; font-weight: 600; margin: 0 0 16px; line-height: 1.4; }
+
+.options { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.options li {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+}
+.opt-letter {
+  flex: 0 0 26px; height: 26px; display: grid; place-items: center;
+  border-radius: 6px; font-weight: 700; font-size: 13px; color: #06121f;
+}
+.opt-A { background: var(--a); } .opt-B { background: var(--b); }
+.opt-C { background: var(--c); } .opt-D { background: var(--d); }
+.opt-text { flex: 1; }
+.options li.is-correct { border-color: var(--ok); background: rgba(63,185,80,.10); }
+.options li.is-wrong { opacity: .45; }
+
+.avatar {
+  flex: 0 0 30px; height: 30px; border-radius: 50%; object-fit: cover;
+  background: var(--panel); border: 1px solid var(--line);
+}
+.avatar-fallback {
+  flex: 0 0 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 12px; font-weight: 700; color: #06121f; background: var(--muted);
+}
+
+.tally-head { display: flex; justify-content: space-between; align-items: baseline; }
+.tally { display: grid; gap: 12px; }
+.tally-row { display: grid; grid-template-columns: 26px 1fr 78px; align-items: center; gap: 12px; }
+.tally-bar { height: 24px; background: var(--panel-2); border-radius: 5px; overflow: hidden; }
+.tally-fill { height: 100%; transition: width .25s ease; }
+.tally-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; }
+.tally-num small { color: var(--muted); }
+.hint { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
+
+.rank { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rank th { text-align: left; color: var(--muted); font-weight: 500; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .05em; padding-bottom: 8px; }
+.rank td { padding: 7px 0; border-top: 1px solid var(--line); }
+.rank .num { text-align: right; font-variant-numeric: tabular-nums; }
+.rank .who { display: flex; align-items: center; gap: 9px; }
+.rank .avatar, .rank .avatar-fallback { flex: 0 0 24px; width: 24px; height: 24px; font-size: 11px; }
+
+.explain { color: var(--muted); font-size: 14px; border-left: 2px solid var(--accent);
+  padding-left: 12px; margin: 16px 0 0; }
+.hidden { display: none !important; }

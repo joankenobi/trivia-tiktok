@@ -1,0 +1,206 @@
+/* OBS overlay: transparent canvas, no interaction, safe areas. */
+
+.overlay-body {
+  background: transparent;
+  margin: 0;
+  overflow: hidden;
+  /* The whole surface is decorative: never intercept clicks in OBS. */
+  pointer-events: none;
+  user-select: none;
+}
+
+.stage {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 6%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.o-question {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, .85);
+  letter-spacing: -.01em;
+}
+
+.o-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.o-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(14, 17, 22, .82);
+  border: 2px solid rgba(255, 255, 255, .16);
+  border-radius: 12px;
+  min-height: 74px;
+}
+
+.o-option .opt-letter {
+  flex: 0 0 44px;
+  height: 44px;
+  font-size: 20px;
+  border-radius: 9px;
+}
+
+.o-option .opt-text {
+  flex: 1;
+  font-size: 23px;
+  font-weight: 650;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .7);
+}
+
+.o-bar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 7px;
+  background: rgba(255, 255, 255, .1);
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+.o-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  transition: width .3s ease;
+}
+
+/* First responder badge, pinned to the OUTER edge of each box so A/B/C/D never
+   collide and nothing overlaps the option text. Padding and badge must sit on
+   the SAME side: padding reserves the room, the badge fills it. */
+.o-first {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .35);
+  background: #22272e;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .6);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.o-first img { width: 100%; height: 100%; object-fit: cover; }
+/* Initial fallback rendered by common.js when no avatar was cached. */
+.o-first.avatar-fallback {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: #3a4250;
+}
+.o-first span {
+  font-size: 21px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Two-column grid: A and C are the left column, B and D the right one. Pinning
+   badges to the outer edges spreads them to the four corners of the block. */
+.o-option[data-side="left"]  { padding-left: 68px; }
+.o-option[data-side="left"]  .o-first { left: 7px; }
+
+.o-option[data-side="right"] { padding-right: 68px; }
+.o-option[data-side="right"] .o-first { right: 7px; }
+
+.o-option.is-correct { border-color: var(--ok); background: rgba(35, 78, 46, .85); }
+.o-option.is-dimmed { opacity: .42; }
+
+.o-count {
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  opacity: .9;
+}
+
+.o-status {
+  margin: 0;
+  font-size: 19px;
+  color: #cbd5e1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+}
+
+/* Countdown, right-aligned on the question line. Tabular figures so the digits
+   do not shift as they change; red in the last seconds. */
+.o-timer {
+  align-self: flex-end;
+  font-size: 40px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, .85);
+}
+.o-timer.is-urgent { color: #ff6b6b; }
+
+/* End-of-show podium. Replaces the option grid visually by sitting on top of it,
+   so the final frame reads as a result and not as another question. */
+.o-final {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 6%;
+  padding: 26px 30px;
+  background: rgba(14, 17, 22, .92);
+  border: 2px solid rgba(255, 255, 255, .16);
+  border-radius: 16px;
+}
+.o-final-title {
+  margin: 0 0 16px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .8);
+}
+.o-final-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  counter-reset: podium;
+}
+.o-final-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 24px;
+  font-weight: 650;
+  color: #fff;
+  counter-increment: podium;
+}
+.o-final-list li::before {
+  content: counter(podium);
+  flex: 0 0 34px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #cbd5e1;
+}
+.o-final-list .who {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.o-final-list .num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--accent);
+}
+.o-final-list .avatar { width: 40px; height: 40px; }

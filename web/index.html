@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trivia — consola del host</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="bar">
+  <h1>Trivia <span class="sub">consola del host</span></h1>
+  <div class="bar-right">
+    <span id="conn" class="pill pill-idle">—</span>
+    <a class="link" href="/overlay" target="_blank" rel="noopener">Abrir overlay ↗</a>
+  </div>
+</header>
+
+<main>
+  <section id="setup" class="card">
+    <h2>Nueva partida</h2>
+    <div class="grid">
+      <label>Room ID
+        <input id="room-id" type="text" placeholder="7689914819815623425">
+        <span id="room-hint" class="hint"></span>
+      </label>
+      <label>Preguntas
+        <input id="qcount" type="number" min="1" max="50" value="10">
+      </label>
+      <label>Segundos por pregunta
+        <input id="tlimit" type="number" min="3" max="120" value="20">
+      </label>
+    </div>
+    <button id="btn-create" class="primary">Crear e iniciar</button>
+    <p id="setup-msg" class="msg"></p>
+  </section>
+
+  <section id="board" class="hidden">
+    <div class="board-head">
+      <div>
+        <span class="label">Ronda <b id="round-pos">—</b> de <b id="round-total">—</b></span>
+        <span id="round-status" class="pill">—</span>
+        <span id="countdown" class="countdown hidden"></span>
+      </div>
+      <div class="actions">
+        <button id="btn-autoplay" class="primary">Detener automático</button>
+        <button id="btn-next">Abrir siguiente</button>
+        <button id="btn-close">Cerrar ahora</button>
+        <button id="btn-reveal">Revelar</button>
+      </div>
+    </div>
+
+    <div class="card question-card">
+      <p id="question-text" class="question">—</p>
+      <ol id="options" class="options"></ol>
+      <p id="explain" class="explain hidden"></p>
+    </div>
+
+    <div class="card">
+      <div class="tally-head">
+        <h2>Tally en vivo</h2>
+        <span class="label"><b id="voters">0</b> participantes únicos</span>
+      </div>
+      <div id="tally" class="tally"></div>
+      <p class="hint">El avatar marca quién respondió primero cada opción. No otorga puntos.</p>
+    </div>
+
+    <div class="card">
+      <h2>Ranking</h2>
+      <table class="rank"><thead><tr><th>#</th><th>Jugador</th><th>Aciertos</th><th>Puntos</th></tr></thead>
+      <tbody id="rank-body"></tbody></table>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="/js/control.js"></script>
+</body>
+</html>

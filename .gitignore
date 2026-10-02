@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local SQLite database and cached avatars
+trivia_game.db
+*.db
+web/avatars/*
+!web/avatars/.gitkeep

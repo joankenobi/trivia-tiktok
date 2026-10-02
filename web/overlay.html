@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Trivia — overlay</title>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/overlay.css">
+</head>
+<body class="overlay-body">
+<div id="stage" class="stage">
+  <p id="q" class="o-question">Esperando…</p>
+  <div id="timer" class="o-timer hidden"><span id="o-timer-value">0</span>s</div>
+  <div id="options" class="o-options"></div>
+  <p id="o-status" class="o-status"></p>
+  <div id="o-final" class="o-final hidden">
+    <p class="o-final-title">Fin de la partida</p>
+    <ol id="o-final-list" class="o-final-list"></ol>
+  </div>
+</div>
+<script type="module" src="/js/overlay.js"></script>
+</body>
+</html>
