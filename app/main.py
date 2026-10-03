@@ -67,8 +67,36 @@ async def lifespan(app: FastAPI):
         await dispose_engine()
 
 
+def _ships_with_the_app(path: str) -> bool:
+    """True for the JS/CSS that changes on every deploy.
+
+    Deliberately narrow. `web/avatars/` holds hundreds of content-stable images
+    and is exactly where a cache earns its keep, so a blanket `no-store` would
+    turn every render into 300 image requests.
+    """
+    return path.startswith("/js/") or path.endswith((".js", ".css"))
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title=settings.app_name, lifespan=lifespan)
+
+    # The app's own JS and CSS are never cached, so a browser source that loads
+    # the page always runs the bytes that are on disk right now.
+    #
+    # This matters more than it looks. An OBS browser source keeps its document
+    # -- and its ES module map -- alive across a server restart, so a stale copy
+    # silently outlives the fix that changed it: the API is right, the tests pass,
+    # and the screen still runs code that no longer exists. Note the boundary:
+    # this governs what a *fresh* page load fetches, not a document that is
+    # already open. That one still needs an explicit browser-source refresh.
+    #
+    # `BaseHTTPMiddleware` is safe here because nothing in this app streams.
+    @app.middleware("http")
+    async def no_store_app_assets(request, call_next):
+        response = await call_next(request)
+        if _ships_with_the_app(request.url.path):
+            response.headers["Cache-Control"] = "no-store"
+        return response
 
     api = APIRouter(prefix="/api/v1")
     api.include_router(lives_routes.router)

@@ -12,9 +12,13 @@ import os
 import tempfile
 import time
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import httpx
+import pytest
 import pytest_asyncio
+
+from app.config import settings
 
 
 class FakeUpstream:
@@ -173,6 +177,29 @@ class TestHealth:
         assert client.get("/control", headers={"accept": "*/*"}).status_code == 200
         assert client.get("/js/overlay.js").status_code == 200
         assert client.get("/overlay.css").status_code == 200
+
+    def test_app_js_and_css_are_never_cached(self, client):
+        """A browser source must run the bytes on disk, not the ones it kept.
+
+        An OBS source keeps its document alive across a server restart, so a
+        cached `common.js` outlives the fix that changed it and the screen lies
+        while the API and the tests are both right.
+        """
+        for path in ("/js/common.js", "/js/overlay.js", "/overlay.css"):
+            headers = client.get(path).headers
+            assert headers["cache-control"] == "no-store", path
+
+    def test_avatars_stay_cacheable(self, client):
+        """`no-store` on the static tree would cost ~300 image requests per render.
+
+        The guard has to be narrow enough to leave the avatars alone.
+        """
+        # Any avatar will do; the header is what is under test, not the bytes.
+        avatar = next(Path(settings.avatars_dir).glob("*.webp"), None)
+        if avatar is None:
+            pytest.skip("no cached avatars in this checkout")
+        headers = client.get(f"/avatars/{avatar.name}").headers
+        assert "no-store" not in headers.get("cache-control", "")
 
     def test_unknown_api_path_404s_as_json(self, client):
         assert client.get("/api/v1/nope").status_code == 404
