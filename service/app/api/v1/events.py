@@ -6,8 +6,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.schemas.events import ActiveStreamResponse, EventListResponse
-from app.services.events import RoomNotFoundError, get_active_stream, get_events
+from app.schemas.events import ActiveLiveResponse, ActiveStreamResponse, EventListResponse
+from app.services.events import (
+    RoomNotFoundError,
+    get_active_live,
+    get_active_stream,
+    get_events,
+)
 
 router = APIRouter(tags=["events"])
 
@@ -26,6 +31,16 @@ def _parse_types(raw: str | None) -> list[str] | None:
                 detail=f"Unknown event type {kind!r}; allowed: comment, gift, like, follow",
             )
     return types or None
+
+
+# Route ordering: /lives/active is 2 path segments while every room-scoped
+# route below has 3 or 4, so there is no conflict today. FastAPI matches in
+# registration order, so if a GET /lives/{room_id} route is ever added this
+# endpoint MUST stay declared above it.
+@router.get("/lives/active", response_model=ActiveLiveResponse)
+async def active_live(db: AsyncSession = Depends(get_db)) -> ActiveLiveResponse:
+    """Room discovery: which live is being captured, if any. Always 200."""
+    return await get_active_live(db)
 
 
 @router.get("/lives/{room_id}/events", response_model=EventListResponse)

@@ -58,3 +58,17 @@ class ActiveStreamResponse(BaseModel):
     started_at: datetime
     host_username: str | None = None
     active: bool
+
+
+class ActiveLiveResponse(BaseModel):
+    """Room-discovery shape: every field is nullable because no room is known.
+
+    Deliberately not a subclass of ``ActiveStreamResponse``: ``room_id`` cannot
+    be widened to ``str | None`` in a subclass, and the generated OpenAPI schema
+    must show the nullable shape truthfully to the game client.
+    """
+
+    room_id: str | None
+    started_at: datetime | None
+    host_username: str | None = None
+    active: bool

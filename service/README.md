@@ -10,7 +10,12 @@ both sides define their own pydantic models against the frozen contract in
 | Method | Path | Description |
 | --- | --- | --- |
 | `POST` | `/api/v1/lives/{room_id}/batches` | Accept one `Batch`, persist events, return `{"received": n, "batch_id": <stream id>}` |
+| `GET` | `/api/v1/lives/active` | Room discovery: the room being captured right now. Always 200; `room_id` is `null` only if the database never ingested a batch |
+| `GET` | `/api/v1/lives/{room_id}/events` | Chat events for the room, cursor-paginated (`since`, `types`, `limit`). `404` for an unknown room |
+| `GET` | `/api/v1/lives/{room_id}/streams/active` | Last batch time and `active` flag for one room. `404` for an unknown room |
 | `GET` | `/api/v1/health` | `{"status": "ok"}` |
+
+The read API for game clients is documented in [`events-api.md`](events-api.md).
 
 The path `room_id` is authoritative; a body `room_id` that contradicts it is
 rejected with `400`.
@@ -104,8 +109,8 @@ app/
   main.py          app factory + lifespan
   config.py        dataclass settings from .env (DATABASE_URL, LOG_LEVEL, HOST, PORT, MAX_BATCH_EVENTS, MAX_PAYLOAD_BYTES)
   database.py      async engine/session factory, get_db dependency
-  api/v1/          HTTP routers (health, batches)
-  services/        batch ingestion / normalization logic
+  api/v1/          HTTP routers (health, batches, events)
+  services/        batch ingestion / normalization and read-side workflows
   repositories/    data access (async SQLAlchemy)
   schemas/         pydantic v2 models mirroring the contract
   models/          SQLAlchemy ORM entities

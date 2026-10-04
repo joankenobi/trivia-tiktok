@@ -12,6 +12,8 @@ from app.models.entities import Stream
 BATCH_URL = "/api/v1/lives/room_123/batches"
 EVENTS_URL = "/api/v1/lives/room_123/events"
 ACTIVE_URL = "/api/v1/lives/room_123/streams/active"
+ACTIVE_LIVE_URL = "/api/v1/lives/active"
+ROOM_456_BATCH_URL = "/api/v1/lives/room_456/batches"
 
 TS = "2025-01-01T10:00:00Z"
 USER = {"unique_id": "u_1", "nickname": "Tester", "profile_picture_url": "http://pic/u1"}
@@ -233,3 +235,74 @@ async def test_active_stream_room_not_found_404(client):
     res = await client.get("/api/v1/lives/ghost_room/streams/active")
     assert res.status_code == 404
     assert res.json()["detail"] == "Room not found"
+
+
+async def test_active_live_empty_database(client):
+    res = await client.get(ACTIVE_LIVE_URL)
+    assert res.status_code == 200
+    assert res.json() == {
+        "room_id": None,
+        "started_at": None,
+        "host_username": None,
+        "active": False,
+    }
+
+
+async def test_active_live_returns_ingested_room(client):
+    now = utcnow()
+    batch = make_batch(
+        [make_event("comment", data={"message": "hola"}, ts=now.isoformat())],
+        started_at=now.isoformat(),
+        ended_at=now.isoformat(),
+        host_username="@host.one",
+    )
+    assert (await client.post(BATCH_URL, json=batch)).status_code == 200
+
+    res = await client.get(ACTIVE_LIVE_URL)
+    assert res.status_code == 200
+    body = res.json()
+    assert body["room_id"] == "room_123"
+    assert body["host_username"] == "@host.one"
+    assert body["active"] is True
+
+
+async def test_active_live_prefers_most_recent_room(client, db_session):
+    await ingest(client, [mixed_events()[0]])
+    stream = (await db_session.execute(select(Stream))).scalar_one()
+    stream.last_seen = utcnow() - timedelta(minutes=5)
+    await db_session.commit()
+
+    now = utcnow().isoformat()
+    other = make_batch(
+        [make_event("comment", data={"message": "otro"}, ts=now)],
+        room_id="room_456",
+        stream_id="stream_456",
+        started_at=now,
+        ended_at=now,
+    )
+    assert (await client.post(ROOM_456_BATCH_URL, json=other)).status_code == 200
+
+    body = (await client.get(ACTIVE_LIVE_URL)).json()
+    assert body["room_id"] == "room_456"
+    assert body["active"] is True
+
+
+async def test_active_live_stale_still_reports_room(client, db_session):
+    await ingest(client, [mixed_events()[0]])
+
+    stream = (await db_session.execute(select(Stream))).scalar_one()
+    stream.last_seen = utcnow() - timedelta(minutes=5)
+    await db_session.commit()
+
+    res = await client.get(ACTIVE_LIVE_URL)
+    assert res.status_code == 200
+    body = res.json()
+    assert body["room_id"] == "room_123"
+    assert body["active"] is False
+
+
+async def test_active_live_does_not_shadow_room_routes(client):
+    await ingest(client, [mixed_events()[0]])
+
+    assert (await client.get(EVENTS_URL)).status_code == 200
+    assert (await client.get(ACTIVE_URL)).status_code == 200

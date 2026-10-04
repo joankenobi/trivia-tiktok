@@ -5,14 +5,17 @@ from __future__ import annotations
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.database import utcnow
+from app.database import to_naive_utc, utcnow
+from app.models.entities import Stream
 from app.repositories.events_reader import (
     EventRecord,
+    latest_stream,
     latest_stream_for_room,
     list_event_page,
     room_stream_ids,
 )
 from app.schemas.events import (
+    ActiveLiveResponse,
     ActiveStreamResponse,
     ChatEventResponse,
     CommentContent,
@@ -104,23 +107,55 @@ async def get_events(
     return EventListResponse(events=events, next_cursor=next_cursor, has_more=page.has_more)
 
 
+def _to_active_stream(stream: Stream) -> ActiveStreamResponse:
+    """Active-window verdict for a stream, shared by both active-stream services.
+
+    "Active" means the stream's last ingested batch arrived within the last
+    ``active_stream_window_seconds`` (see app.config, default 30s). ``last_seen``
+    is normalized to naive UTC because pydantic parses ``Z``-suffixed timestamps
+    as tz-aware while SQLite stores naive; comparing the two raises "can't
+    compare offset-naive and offset-aware datetimes" on a tz-aware database.
+    """
+    # to_naive_utc keeps the subtraction safe on a tz-aware store (Postgres).
+    elapsed = (utcnow() - to_naive_utc(stream.last_seen)).total_seconds()
+    return ActiveStreamResponse(
+        room_id=stream.room_id,
+        started_at=stream.first_seen,
+        host_username=stream.host_username,
+        active=elapsed <= settings.active_stream_window_seconds,
+    )
+
+
 async def get_active_stream(db: AsyncSession, room_id: str) -> ActiveStreamResponse:
     """Most recently seen stream for the room and whether it is still active.
 
-    "Active" means the stream's last ingested batch arrived within the last
-    ``active_stream_window_seconds`` (see app.config, default 30s). A stale
-    stream is still returned (with ``active=False``) so the client can react
-    to the same live going quiet.
+    A stale stream is still returned (with ``active=False``) so the client can
+    react to the same live going quiet.
     """
     stream = await latest_stream_for_room(db, room_id)
     if stream is None:
         raise RoomNotFoundError(room_id)
 
-    elapsed = (utcnow() - stream.last_seen).total_seconds()
-    active = elapsed <= settings.active_stream_window_seconds
-    return ActiveStreamResponse(
-        room_id=stream.room_id,
-        started_at=stream.first_seen,
-        host_username=stream.host_username,
-        active=active,
+    return _to_active_stream(stream)
+
+
+async def get_active_live(db: AsyncSession) -> ActiveLiveResponse:
+    """Room discovery: which room is being captured right now, if any.
+
+    Always returns a response, never an error: ``room_id`` is ``None`` only when
+    the database has never ingested a batch. A stale stream keeps its real
+    ``room_id`` with ``active=False``, matching ``get_active_stream``.
+    """
+    stream = await latest_stream(db)
+    if stream is None:
+        return ActiveLiveResponse(
+            room_id=None, started_at=None, host_username=None, active=False
+        )
+
+    active = _to_active_stream(stream)
+    return ActiveLiveResponse(
+        room_id=active.room_id,
+        started_at=active.started_at,
+        host_username=active.host_username,
+        active=active.active,
     )

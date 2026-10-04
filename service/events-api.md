@@ -7,9 +7,64 @@ How your game consumes live chat events from the TikTok Lives backend.
 - **No authentication** (matches the ingestion API; a key can be added later if needed)
 - All timestamps are ISO 8601 UTC (e.g. `2026-09-13T22:30:01.123456Z`)
 
+## Consumption flow
+
+A game must not hardcode a room id — the streamer changes. Consume the API in this order:
+
+1. **`GET /api/v1/lives/active`** — discover which room is being captured right now.
+2. **`GET /api/v1/lives/{room_id}/events`** — poll chat events for that room.
+3. **`GET /api/v1/lives/{room_id}/streams/active`** — optionally, per room, to know whether the live is still going.
+
+Step 1 is a discovery endpoint and **always returns 200**. `room_id` is `null`
+only on a database that has never ingested a batch. When a live goes quiet the
+room keeps being reported with `active: false`, so your game can react instead
+of assuming the room id changed.
+
 ---
 
-## 1. Get chat events (polling)
+## 1. Discover the active live
+
+```
+GET /api/v1/lives/active
+```
+
+No parameters, no 404 — a game cannot know the room id in advance, so this
+endpoint answers "none yet" in the body instead of failing.
+
+### Response
+
+```json
+{
+  "room_id": "7684638051930344214",
+  "started_at": "2026-09-13T21:00:00Z",
+  "host_username": "braingame.live",
+  "active": true
+}
+```
+
+Before the first batch has ever been ingested:
+
+```json
+{
+  "room_id": null,
+  "started_at": null,
+  "host_username": null,
+  "active": false
+}
+```
+
+| Field           | Type    | Description |
+| --------------- | ------- | ----------- |
+| `room_id`       | string? | TikTok room id of the most recently seen stream. `null` only if the database never ingested a batch. |
+| `started_at`    | string? | When the live started (first seen batch) |
+| `host_username` | string? | TikTok username of the host, if known |
+| `active`        | boolean | `true` if a batch was ingested in the last 30 seconds. A stale room is still returned with its real `room_id` and `active: false`. |
+
+When several rooms exist, the one with the most recent `last_seen` wins.
+
+---
+
+## 2. Get chat events (polling)
 
 ```
 GET /api/v1/lives/{room_id}/events
@@ -89,7 +144,7 @@ poll 3: GET /events?since=87                 -> events: [], next_cursor = 87
 
 ---
 
-## 2. Active stream status
+## 3. Active stream status (per room)
 
 ```
 GET /api/v1/lives/{room_id}/streams/active
@@ -119,7 +174,7 @@ GET /api/v1/lives/{room_id}/streams/active
 
 | Status | When | Body |
 | ------ | ---- | ---- |
-| `404`  | `room_id` has no persisted stream/events | `{ "detail": "Room not found" }` |
+| `404`  | `{room_id}` on the room-scoped endpoints (`/lives/{room_id}/events`, `/lives/{room_id}/streams/active`) has no persisted stream/events. Never returned by `/lives/active`. | `{ "detail": "Room not found" }` |
 | `422`  | Invalid `types` value, `limit` out of `1..200`, or malformed `since` | `{ "detail": "..." }` |
 
 ---

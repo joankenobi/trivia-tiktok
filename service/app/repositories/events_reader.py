@@ -63,6 +63,17 @@ async def latest_stream_for_room(db: AsyncSession, room_id: str) -> Stream | Non
     return res.scalar_one_or_none()
 
 
+async def latest_stream(db: AsyncSession) -> Stream | None:
+    """Most recently seen stream across all rooms (by ``last_seen``).
+
+    Used for room discovery: the caller has no room id yet.
+    """
+    res = await db.execute(
+        select(Stream).order_by(Stream.last_seen.desc(), Stream.id.desc()).limit(1)
+    )
+    return res.scalar_one_or_none()
+
+
 async def list_event_page(
     db: AsyncSession,
     stream_ids: list[int],
