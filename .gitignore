@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.ruff_cache/
 .venv/
 venv/
 
@@ -10,3 +11,6 @@ trivia_game.db
 *.db
 web/avatars/*
 !web/avatars/.gitkeep
+
+.atl/
+.web/avatars/
