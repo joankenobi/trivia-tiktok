@@ -12,5 +12,4 @@ trivia_game.db
 web/avatars/*
 !web/avatars/.gitkeep
 
-.atl/
-.web/avatars/
+.atl
