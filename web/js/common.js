@@ -38,6 +38,62 @@ export function currentRound(rounds) {
   );
 }
 
+/**
+ * The viewer the reveal frame should announce: whoever answered the correct
+ * option first.
+ *
+ * `first_by_option` holds the earliest answer per option regardless of
+ * correctness, but one vote per round is enforced, so the entry for the correct
+ * option IS the first correct responder. No correctness filter needed here.
+ *
+ * Only a revealed round announces: `closed` already stores the answer on the
+ * server but the API only exposes it once the host reveals, and announcing a
+ * round that is merely over would spoil it a second early.
+ */
+export function firstCorrectResponder(round) {
+  if (!round || round.status !== "revealed" || !round.correct_option) return null;
+  return round.tally?.first_by_option?.[round.correct_option] || null;
+}
+
+/**
+ * Identity of the current announcement, and the only thing allowed to decide
+ * that the toast animates.
+ *
+ * `render()` rebuilds its DOM on every 1s poll, so an entrance animation keyed on
+ * "there is a winner" replays once per second and strobes on a live stream. The
+ * round belongs in the key because the same viewer winning two questions in a row
+ * is a new announcement, not the same one still on screen.
+ */
+export function firstCorrectKey(round, winner) {
+  return `${round.id}:${winner.unique_id}`;
+}
+
+/**
+ * What one press of the host's room-id button should do, as a plain decision.
+ *
+ * Lives here, not in `control.js`, for the same reason `currentRound` and
+ * `firstCorrectResponder` do: control.js binds the DOM on import and cannot be
+ * tested by plain node. Pure, so all three outcomes are checked without a
+ * browser.
+ *
+ * The rule is that placement always wins. `stale` means the live started before
+ * the current UTC day, which is exactly the case the passive auto-fill gives up
+ * on -- a stream that began at 20:00 local (23:00 UTC) is still running after
+ * 21:00 and the auto-fill has already written it off as yesterday. The host
+ * pressing the button is asserting they are streaming, so the id goes in and the
+ * warning rides along. Refusing would just hand back the bug the button was
+ * added to fix.
+ *
+ * Refuses only what there is nothing to place: the route collapses no live, an
+ * ended live and an unreadable upstream into the same null shape, and a refused
+ * plan carries neither a value nor a warning so the console can say why.
+ */
+export function roomFillPlan(live) {
+  const roomId = typeof live?.room_id === "string" ? live.room_id.trim() : "";
+  if (!roomId) return { place: false, value: null, stale: false };
+  return { place: true, value: roomId, stale: live.stale === true };
+}
+
 export async function api(path, options = {}) {
   const res = await fetch(`${API}${path}`, {
     headers: { "Content-Type": "application/json" },

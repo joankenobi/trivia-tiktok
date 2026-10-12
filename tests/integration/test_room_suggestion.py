@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 import httpx
 
 from app.infra.tiktok_live import ActiveLive, TikTokLiveClient
-from app.services.room_suggestion import started_today, suggest_room
+from app.services.room_suggestion import is_stale, started_today, suggest_room
 
 NOW = datetime(2026, 10, 1, 18, 0, tzinfo=timezone.utc)
 
@@ -139,3 +139,73 @@ class TestStartedToday:
 
     def test_different_day(self):
         assert started_today(NOW, NOW + timedelta(days=1)) is False
+
+
+class TestIsStale:
+    """The same UTC-day rule, read the other way.
+
+    The host's explicit button places the room id even when the auto-fill
+    refuses to, so it needs to know it is looking at yesterday's live -- as
+    information, never as a gate. That answer must come from the same rule the
+    suggestion uses, or the two would drift apart at the midnight boundary.
+    """
+
+    def test_same_instant_is_not_stale(self):
+        assert is_stale(NOW, NOW) is False
+
+    def test_a_live_that_started_earlier_today_is_not_stale(self):
+        """Hours old is not the same as yesterday, however late it looks locally."""
+        early = datetime(2026, 10, 1, 1, 0, tzinfo=timezone.utc)
+        assert is_stale(early, datetime(2026, 10, 1, 23, 0, tzinfo=timezone.utc)) is False
+
+    def test_a_live_from_a_previous_day_is_stale(self):
+        assert is_stale(NOW - timedelta(days=1), NOW) is True
+
+    def test_live_ending_just_before_utc_midnight_is_stale(self):
+        """The stale case that a naive local-time check would wave through."""
+        just_before = datetime(2026, 9, 30, 23, 59, tzinfo=timezone.utc)
+        assert is_stale(just_before, datetime(2026, 10, 1, 0, 1, tzinfo=timezone.utc)) is True
+
+    def test_live_starting_just_after_utc_midnight_is_not_stale(self):
+        just_after = datetime(2026, 10, 1, 0, 1, tzinfo=timezone.utc)
+        assert is_stale(just_after, just_after) is False
+
+    def test_the_boundary_instant_belongs_to_the_new_day(self):
+        """Exactly midnight is today's stream, not yesterday's."""
+        midnight = datetime(2026, 10, 1, 0, 0, tzinfo=timezone.utc)
+        assert is_stale(midnight, midnight) is False
+        assert is_stale(midnight, midnight + timedelta(days=1)) is True
+
+    def test_now_defaults_to_the_real_clock(self):
+        assert is_stale(datetime.now(timezone.utc)) is False
+
+    def test_naive_now_is_accepted(self):
+        """Never raise comparing naive against aware: that bug class is upstream's."""
+        assert is_stale(NOW, datetime(2026, 10, 1, 18, 0)) is False  # noqa: DTZ001
+
+    def test_is_stale_is_the_exact_inverse_of_started_today(self):
+        """One rule, two readings. If these drift, the two routes disagree.
+
+        Every pair below is the same comparison `suggest_room` makes, so this is
+        the invariant that keeps the auto-fill and the button from answering
+        differently about the very same live.
+        """
+        moments = [
+            datetime(2026, 9, 30, 23, 59, tzinfo=timezone.utc),
+            datetime(2026, 10, 1, 0, 0, tzinfo=timezone.utc),
+            datetime(2026, 10, 1, 0, 1, tzinfo=timezone.utc),
+            NOW,
+            NOW + timedelta(days=1),
+        ]
+        for started_at in moments:
+            for now in moments:
+                assert is_stale(started_at, now) is (not started_today(started_at, now)), (
+                    started_at,
+                    now,
+                )
+
+    def test_a_stale_live_is_still_the_one_the_button_would_place(self):
+        """The whole point: flagged, not filtered."""
+        yesterday = live(started_at_utc=NOW - timedelta(days=1))
+        assert suggest_room(yesterday, now_utc=NOW) is None
+        assert is_stale(yesterday.started_at_utc, NOW) is True

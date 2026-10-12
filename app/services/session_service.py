@@ -220,7 +220,14 @@ def _aware(dt: datetime) -> datetime:
 
 
 async def build_tally(session: AsyncSession, rnd: Round) -> dict:
-    """Compute counts, unique voters and first responder per option."""
+    """Compute counts, unique voters and first responder per option.
+
+    Each first responder also carries what its answer was worth (`points`) and
+    what the viewer has earned across the show (`total_points`), because the
+    reveal frame announces that number and the frozen snapshot is the only place
+    it survives. Both are legitimately 0 while the round is open: scoring runs at
+    close, so a live tally reports nothing rather than guessing.
+    """
     answers = list(
         (
             await session.execute(
@@ -235,6 +242,9 @@ async def build_tally(session: AsyncSession, rnd: Round) -> dict:
     counts = {letter: 0 for letter in OptionLetter}
     first_by_option: dict[str, dict] = {}
     unique_ids: set[int] = set()
+    # Option letter -> internal user id. Kept out of the payload because the
+    # public contract speaks in TikTok `unique_id`, not in our primary keys.
+    first_user_ids: dict[str, int] = {}
 
     for answer, user in answers:
         letter = OptionLetter(answer.option)
@@ -247,13 +257,49 @@ async def build_tally(session: AsyncSession, rnd: Round) -> dict:
                 "avatar_path": user.avatar_path,
                 "event_id": answer.event_id,
                 "ts_epoch_us": answer.ts_epoch_us,
+                # Scored by `close_round` just above this call, and that write is
+                # still pending here: the query above autoflushed it, and the
+                # identity map keeps the new values either way.
+                "points": answer.points or 0,
+                "total_points": 0,  # filled in below, once every option is known
             }
+            first_user_ids[letter.value] = answer.user_id
+
+    totals = await _show_totals_by_user_id(
+        session, rnd.show_id, set(first_user_ids.values())
+    )
+    for letter, user_id in first_user_ids.items():
+        first_by_option[letter]["total_points"] = totals.get(user_id, 0)
 
     return {
         "counts": {k.value: v for k, v in counts.items()},
         "unique_voters": len(unique_ids),
         "first_by_option": first_by_option,
     }
+
+
+async def _show_totals_by_user_id(
+    session: AsyncSession, show_id: int, user_ids: set[int]
+) -> dict[int, int]:
+    """Running score per viewer across one show, restricted to `user_ids`.
+
+    One grouped query, not one per viewer: this runs on the hottest read path in
+    the app (every client polls the tally every second) and there is no reason
+    for its cost to grow with the size of the show when only the four first
+    responders need a total. Joins `Round` because the answer's own round is what
+    decides which show it belongs to.
+    """
+    if not user_ids:
+        return {}
+    rows = (
+        await session.execute(
+            select(Answer.user_id, func.sum(Answer.points).label("points"))
+            .join(Round, Round.id == Answer.round_id)
+            .where(Round.show_id == show_id, Answer.user_id.in_(user_ids))
+            .group_by(Answer.user_id)
+        )
+    ).all()
+    return {row.user_id: int(row.points or 0) for row in rows}
 
 
 async def close_round(

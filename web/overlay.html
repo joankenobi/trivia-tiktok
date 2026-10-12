@@ -12,6 +12,9 @@
   <div id="timer" class="o-timer hidden"><span id="o-timer-value">0</span>s</div>
   <div id="options" class="o-options"></div>
   <p id="o-status" class="o-status"></p>
+  <!-- First correct responder. Empty until the reveal frame announces someone;
+       the card itself is built in overlay.js so it only exists when it animates. -->
+  <div id="o-first-correct" class="o-first-correct hidden"></div>
   <div id="o-final" class="o-final hidden">
     <p class="o-final-title">Fin de la partida</p>
     <ol id="o-final-list" class="o-final-list"></ol>

@@ -5,6 +5,7 @@ import {
   LETTERS,
   formatSeconds,
   remainingSeconds,
+  roomFillPlan,
 } from "/js/common.js";
 
 const $ = (id) => document.getElementById(id);
@@ -54,13 +55,60 @@ async function prefillRoomId() {
   if (!live?.room_id || field.value.trim()) return;
 
   field.value = live.room_id;
-  const since = live.started_at
-    ? ` desde las ${new Date(live.started_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
-    : "";
-  $("room-hint").textContent = `En vivo: ${live.host_username || live.room_id}${since}`;
+  $("room-hint").textContent = `En vivo: ${live.host_username || live.room_id}${sinceLabel(live.started_at)}`;
 }
 
-// The hint describes the auto-filled value, so it must not outlive an edit.
+// " desde las 20:51", shared so both room hints read the same way.
+function sinceLabel(startedAt) {
+  return startedAt
+    ? ` desde las ${new Date(startedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+    : "";
+}
+
+/**
+ * Place the currently active room id on one click, over whatever is in the field.
+ *
+ * A different intent from the auto-fill above, so it behaves differently in both
+ * directions: the press overwrites a typed value (the host is stating which room
+ * they are in, not asking for a default), and a live from a previous UTC day is
+ * placed anyway with a warning -- at 20:00 local (UTC-3) the stream started at
+ * 23:00 UTC, so after 21:00 the auto-fill has already given up on a show that is
+ * still running. Placement wins; the warning is information.
+ *
+ * The ordering is load-bearing: assigning `value` fires no `input` event, so the
+ * manual-edit listener below never sees this write and a hint set afterwards
+ * survives. Every outcome says something -- a silent button reads as a broken
+ * console.
+ */
+$("btn-fill-room").onclick = async () => {
+  const btn = $("btn-fill-room");
+  const hint = $("room-hint");
+  btn.disabled = true;
+  try {
+    const live = await api("/lives/current");
+    const plan = roomFillPlan(live);
+    if (!plan.place) {
+      // The route collapses "no live", "it ended" and "upstream is down" into one
+      // null shape on purpose, so the message has to admit it cannot tell.
+      hint.textContent = "No hay ningún directo activo ahora, o no se pudo consultar.";
+      return;
+    }
+    $("room-id").value = plan.value;
+    const who = live.host_username || plan.value;
+    const since = sinceLabel(live.started_at);
+    hint.textContent = plan.stale
+      ? `En vivo desde ayer: ${who}${since}. El relleno automático omite los directos de ayer.`
+      : `En vivo: ${who}${since}`;
+  } catch (e) {
+    // The upstream failure never reaches here -- the route degrades it to nulls --
+    // so a throw means this console could not reach its own API.
+    hint.textContent = `No se pudo consultar el directo activo: ${e.message}`;
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+// The hint describes the value in the field, so it must not outlive an edit.
 $("room-id").addEventListener("input", () => { $("room-hint").textContent = ""; });
 prefillRoomId();
 

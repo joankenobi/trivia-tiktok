@@ -146,6 +146,90 @@
 }
 .o-timer.is-urgent { color: #ff6b6b; }
 
+/* First correct responder. Sits under the status line for the reveal window
+   only, and holds nothing at all until overlay.js builds the card. The card
+   carries the entrance animation and is created once per announcement, so the
+   animation cannot replay on a poll. */
+.o-fc-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 22px;
+  background: rgba(14, 17, 22, .86);
+  border: 2px solid var(--ok);
+  border-radius: 14px;
+  animation: o-fc-in .45s cubic-bezier(.2, .9, .25, 1) both;
+}
+
+@keyframes o-fc-in {
+  from { opacity: 0; transform: translateY(12px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .o-fc-card { animation: none; }
+}
+
+.o-fc-caption {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ok);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+}
+
+.o-fc-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .85);
+  /* min-width: 0 is what lets a flex item shrink below its content, without
+     which the ellipsis never engages and a long nickname pushes the score out. */
+  min-width: 0;
+  max-width: 30ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Same size for the image and for the initial that replaces a missing avatar. */
+.o-fc-avatar {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .35);
+  background: #22272e;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .6);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.o-fc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.o-fc-avatar.avatar-fallback {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  background: #3a4250;
+}
+
+.o-fc-points {
+  margin-left: auto;
+  font-size: 32px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ok);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .85);
+}
+
+/* The running show total, deliberately quieter than the award just awarded. */
+.o-fc-total {
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+}
+
 /* End-of-show podium. Replaces the option grid visually by sitting on top of it,
    so the final frame reads as a result and not as another question. */
 .o-final {

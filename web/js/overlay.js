@@ -2,6 +2,8 @@ import {
   api,
   avatarEl,
   currentRound,
+  firstCorrectKey,
+  firstCorrectResponder,
   LETTERS,
   formatSeconds,
   remainingSeconds,
@@ -12,6 +14,10 @@ let showId = null;
 // The ranking is fetched only once the show is over; this guard keeps the 1s poll
 // from re-requesting a result that can no longer change.
 let finalRendered = false;
+// Identity of the winner currently announced. This is the flicker guard: the
+// poll rebuilds `render()` every second, so the toast only rebuilds (and only
+// animates) when this changes.
+let announcedKey = null;
 
 /**
  * The overlay has no UI, so it resolves the show itself:
@@ -67,6 +73,64 @@ function renderTimer(round) {
 }
 
 /**
+ * Announce the first correct responder, and only announce it once.
+ *
+ * Both numbers come from the tally the server already froze at close, so the
+ * overlay never recomputes a score of its own. The card is rebuilt from scratch
+ * on each announcement and left untouched on every poll in between: a fresh node
+ * is what makes the entrance animation run again for the next question, with no
+ * class toggling for the browser to coalesce away.
+ */
+function renderFirstCorrect(round) {
+  const winner = firstCorrectResponder(round);
+  if (!winner) {
+    hideFirstCorrect();
+    return;
+  }
+
+  const key = firstCorrectKey(round, winner);
+  if (key === announcedKey) return;
+  announcedKey = key;
+
+  const card = document.createElement("div");
+  card.className = "o-fc-card";
+
+  const pic = avatarEl(winner, "");
+  pic.classList.add("o-fc-avatar");
+
+  const caption = document.createElement("span");
+  caption.className = "o-fc-caption";
+  caption.textContent = "¡Primero en acertar!";
+
+  const name = document.createElement("span");
+  name.className = "o-fc-name";
+  name.textContent = winner.nickname || winner.unique_id;
+
+  const points = document.createElement("span");
+  points.className = "o-fc-points";
+  points.textContent = `+${winner.points}`;
+
+  const total = document.createElement("span");
+  total.className = "o-fc-total";
+  total.textContent = `Total ${winner.total_points}`;
+
+  card.append(caption, pic, name, points, total);
+  const box = $("o-first-correct");
+  box.innerHTML = "";
+  box.append(card);
+  box.classList.remove("hidden");
+}
+
+function hideFirstCorrect() {
+  // Forgetting the key is what guarantees the next announcement animates: an
+  // equal key must always mean "the very same card is still on screen".
+  announcedKey = null;
+  const box = $("o-first-correct");
+  box.classList.add("hidden");
+  box.innerHTML = "";
+}
+
+/**
  * Show the winner board once the runner marks the show finished. Autoplay means
  * nobody closes the browser to trigger a state change, so the last question
  * would otherwise just sit on screen forever.
@@ -78,6 +142,10 @@ async function renderFinal(show) {
     box.classList.add("hidden");
     return;
   }
+  // The podium covers the whole stage, so a toast from the last question would
+  // print underneath it. It runs before the `finalRendered` short circuit
+  // because the podium is what retires the announcement, not the fetch.
+  hideFirstCorrect();
   if (finalRendered) return;
   box.classList.remove("hidden");
   let rows = [];
@@ -159,6 +227,8 @@ function render(round) {
       : round.status === "closed"
         ? "Votación cerrada"
         : `Correcta: ${round.correct_option}`;
+
+  renderFirstCorrect(round);
 }
 
 setInterval(() => {

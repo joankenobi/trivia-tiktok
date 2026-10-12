@@ -19,10 +19,17 @@
   <section id="setup" class="card">
     <h2>Nueva partida</h2>
     <div class="grid">
-      <label>Room ID
+      <!-- Not a <label> wrapper: a <button> nested in one loses its own click,
+           because activating the label focuses the input it wraps. The label
+           still labels the field through `for`, and the button is a sibling. -->
+      <div class="field">
+        <label for="room-id">Room ID</label>
         <input id="room-id" type="text" placeholder="7689914819815623425">
-        <span id="room-hint" class="hint"></span>
-      </label>
+        <div class="field-foot">
+          <span id="room-hint" class="hint"></span>
+          <button id="btn-fill-room">Usar el en vivo</button>
+        </div>
+      </div>
       <label>Preguntas
         <input id="qcount" type="number" min="1" max="50" value="10">
       </label>

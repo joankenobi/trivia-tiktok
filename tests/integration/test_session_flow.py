@@ -138,6 +138,94 @@ class TestFirstByOption:
         assert answer.points == 0
 
 
+class TestFirstResponderScore:
+    """What the first responder's answer was actually worth.
+
+    The reveal frame announces the first CORRECT responder with the points that
+    answer earned, so the tally has to carry two different numbers: the award for
+    this question, and the viewer's running total for the show.
+    """
+
+    async def test_points_are_zero_while_the_round_is_open(self, session, round_):
+        await svc.ingest_event(session, round_, comment(1001, "A", uid="a1"))
+        tally = await svc.build_tally(session, round_)
+        # Answers are scored at close, so a live tally has nothing to report.
+        # Reporting a guess here would put a number on screen nobody earned.
+        assert tally["first_by_option"]["A"]["points"] == 0
+        assert tally["first_by_option"]["A"]["total_points"] == 0
+
+    async def test_points_carry_the_award_after_close(self, session, round_):
+        opened = round_.opened_at.replace(tzinfo=timezone.utc)
+        await svc.ingest_event(
+            session, round_, comment_at(1001, opened + timedelta(seconds=5), "A", uid="a1")
+        )
+        rnd = await svc.close_round(session, round_.id)
+        award = (await answers_for(session, rnd))[0].points
+
+        first = rnd.tally_json["first_by_option"]["A"]
+        assert first["points"] == award
+        assert first["total_points"] == award
+
+    async def test_first_responder_of_a_wrong_option_is_worth_nothing(self, session, round_):
+        await svc.ingest_event(session, round_, comment(1001, "B", uid="b1"))
+        rnd = await svc.close_round(session, round_.id)
+        first = rnd.tally_json["first_by_option"]["B"]
+        assert first["points"] == 0
+        assert first["total_points"] == 0
+
+    async def test_total_points_span_previous_rounds_of_the_show(self, session, round_):
+        opened = round_.opened_at.replace(tzinfo=timezone.utc)
+        await svc.ingest_event(session, round_, comment_at(1001, opened, "A", uid="winner"))
+        first_round = await svc.close_round(session, round_.id)
+        first_award = (await answers_for(session, first_round))[0].points
+
+        show = (await session.execute(select(Show))).scalar_one()
+        r2 = Round(show_id=show.id, question_id=1, position=1, status="pending",
+                   question_time_limit_s=10)
+        session.add(r2)
+        await session.commit()
+        r2 = await svc.open_round(session, r2.id, opened_cursor=2000)
+        await svc.ingest_event(session, r2, comment_at(2001, r2.opened_at.replace(tzinfo=timezone.utc), "A", uid="winner"))
+        second_round = await svc.close_round(session, r2.id)
+        second_award = (await answers_for(session, second_round))[0].points
+
+        first = second_round.tally_json["first_by_option"]["A"]
+        assert first["points"] == second_award
+        # The running total is what the podium will eventually show this viewer.
+        assert first["total_points"] == first_award + second_award
+
+    async def test_total_points_are_one_viewer_not_the_whole_round(self, session, round_):
+        opened = round_.opened_at.replace(tzinfo=timezone.utc)
+        await svc.ingest_event(session, round_, comment_at(1001, opened, "A", uid="fast"))
+        await svc.ingest_event(
+            session, round_, comment_at(1002, opened + timedelta(seconds=6), "A", uid="slow")
+        )
+        rnd = await svc.close_round(session, round_.id)
+        fast, slow = sorted(await answers_for(session, rnd), key=lambda a: a.event_id)
+
+        first = rnd.tally_json["first_by_option"]["A"]
+        assert first["unique_id"] == "fast"
+        assert first["total_points"] == fast.points
+        assert fast.points > slow.points  # the two awards differ, so the sum would show
+
+    async def test_frozen_tally_validates_as_the_polled_contract(self, session, round_):
+        """The routes rebuild `TallyOut` from the frozen snapshot on every poll.
+
+        A field present in the dict but missing from the schema is dropped by
+        pydantic, so the overlay would read `undefined` and print nothing. This
+        is the guard that keeps the two halves of the contract in step.
+        """
+        from app.api.schemas import TallyOut
+
+        await svc.ingest_event(session, round_, comment(1001, "A", uid="a1"))
+        rnd = await svc.close_round(session, round_.id)
+        out = TallyOut(**rnd.tally_json)
+
+        first = out.first_by_option["A"]
+        assert first.points == rnd.tally_json["first_by_option"]["A"]["points"]
+        assert first.total_points == rnd.tally_json["first_by_option"]["A"]["total_points"]
+
+
 class TestScoring:
     async def test_correct_scores_base_plus_speed_bonus(self, session, round_):
         opened = round_.opened_at.replace(tzinfo=timezone.utc)

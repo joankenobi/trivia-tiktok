@@ -28,6 +28,15 @@ class FirstVoterOut(BaseModel):
     avatar_path: str | None = None
     event_id: int
     ts_epoch_us: int
+    # What this answer earned, and what the viewer has earned across the whole
+    # show. Two different numbers on purpose: the reveal announces one question's
+    # award, while the podium will eventually show the running total.
+    #
+    # Both default to 0 because they are legitimately 0 while the round is open
+    # (scoring happens at close) and because a tally frozen by an older build
+    # must still validate against this contract.
+    points: int = 0
+    total_points: int = 0
 
 
 class TallyOut(BaseModel):
@@ -106,6 +115,25 @@ class ActiveLiveOut(BaseModel):
         else:
             v = v.astimezone(timezone.utc)
         return v.isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
+class CurrentLiveOut(ActiveLiveOut):
+    """The live the host asserted they are streaming, or nulls when there is none.
+
+    Same payload as `ActiveLiveOut`, different contract. The suggestion route
+    nulls a live from a previous UTC day because pre-filling it would point the
+    host at the wrong audience. This one serves the explicit button, where the
+    press *is* that assertion: the room id comes back anyway and `stale` names
+    the case, because a host who says they are live knows something this process
+    does not.
+
+    Subclassed rather than re-declared so the null shape and the timestamp
+    serialization stay literally the same object as the suggestion's: the
+    console reads both, and a divergence here would be invisible until a
+    `started_at` failed to parse on one route only.
+    """
+
+    stale: bool = False
 
 
 class RankingEntry(BaseModel):

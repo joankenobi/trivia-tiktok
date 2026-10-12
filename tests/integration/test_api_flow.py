@@ -283,6 +283,109 @@ class TestRoomSuggestion:
         assert client.get("/api/v1/lives/active").json()["room_id"] is None
 
 
+class TestCurrentLive:
+    """`GET /lives/current` backs the host's explicit room-id button.
+
+    Different contract, different purpose: the press is the host asserting they
+    are streaming, so a live from a previous UTC day is returned anyway and named
+    by `stale`. That is the case the auto-fill gives up on, so this route exists
+    to disagree with it -- and, like the suggestion route, it never fails.
+    """
+
+    def test_returns_a_live_started_today(self, client):
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": datetime.now(timezone.utc).isoformat(),
+            "host_username": "@alexrmr74",
+            "active": True,
+        }
+
+        body = client.get("/api/v1/lives/current").json()
+
+        assert body["room_id"] == "7691759076723772182"
+        assert body["host_username"] == "@alexrmr74"
+        assert body["stale"] is False
+        # Millisecond precision with a Z, like `ts` everywhere else: upstream
+        # sends microseconds, which `new Date()` does not parse consistently.
+        assert body["started_at"].endswith("Z")
+        assert "." in body["started_at"]
+
+    def test_yesterdays_live_comes_back_flagged_not_filtered(self, client):
+        """THE CASE THE BUTTON EXISTS FOR: 20:00 local is 23:00 UTC."""
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
+            "host_username": "@alexrmr74",
+            "active": True,
+        }
+
+        body = client.get("/api/v1/lives/current").json()
+
+        assert body["room_id"] == "7691759076723772182"
+        assert body["stale"] is True
+
+    def test_the_two_routes_disagree_only_about_a_previous_day(self, client):
+        """One upstream live, two contracts. The frozen one stays null-shaped."""
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
+            "active": True,
+        }
+
+        assert client.get("/api/v1/lives/active").json()["room_id"] is None
+        assert client.get("/api/v1/lives/current").json()["room_id"] is not None
+
+    def test_no_live_yields_the_null_shape(self, client):
+        assert client.get("/api/v1/lives/current").json() == {
+            "room_id": None, "host_username": None, "started_at": None, "stale": False
+        }
+
+    def test_an_ended_live_yields_the_null_shape(self, client):
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": datetime.now(timezone.utc).isoformat(),
+            "active": False,
+        }
+
+        assert client.get("/api/v1/lives/current").json()["room_id"] is None
+
+    def test_an_unparseable_live_yields_the_null_shape(self, client):
+        """A room id nobody can trust is worse than no room id."""
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": "not-a-date",
+            "active": True,
+        }
+
+        assert client.get("/api/v1/lives/current").json()["room_id"] is None
+
+    def test_unreachable_upstream_degrades_instead_of_failing(self, client):
+        import httpx
+
+        client.upstream.active_error = httpx.ConnectError("down")
+
+        r = client.get("/api/v1/lives/current")
+
+        # Same rule as the suggestion route: a 500 here is indistinguishable
+        # from a broken console, and the host cannot start a show over it.
+        assert r.status_code == 200
+        assert r.json() == {
+            "room_id": None, "host_username": None, "started_at": None, "stale": False
+        }
+
+    def test_the_live_is_re_read_on_every_press(self, client):
+        """The stream can end between two presses, so nothing is cached."""
+        client.upstream.active = {
+            "room_id": "7691759076723772182",
+            "started_at": datetime.now(timezone.utc).isoformat(),
+            "active": True,
+        }
+        assert client.get("/api/v1/lives/current").json()["room_id"] is not None
+
+        client.upstream.active = None
+        assert client.get("/api/v1/lives/current").json()["room_id"] is None
+
+
 class TestShowLifecycle:
     def test_create_show_builds_pending_rounds(self, client):
         r = client.post(
