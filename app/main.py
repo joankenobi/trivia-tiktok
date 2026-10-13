@@ -115,6 +115,13 @@ def create_app() -> FastAPI:
     async def control() -> FileResponse:
         return FileResponse(WEB_DIR / "index.html")
 
+    # The score record has its own surface. Without a real route, `/ranking`
+    # would fall through `app.frontend(...)` to `index.html`, which only exists
+    # under `/control`.
+    @app.get("/ranking", include_in_schema=False)
+    async def ranking_page() -> FileResponse:
+        return FileResponse(WEB_DIR / "ranking.html")
+
     # Static assets (css/js/avatars) stay low-priority so API routes win.
     app.frontend("/", directory=WEB_DIR, fallback="index.html")
     return app

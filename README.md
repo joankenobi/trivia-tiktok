@@ -23,6 +23,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 - Consola del host: <http://127.0.0.1:8000/control>
 - Overlay para OBS: <http://127.0.0.1:8000/overlay>
+- Récord de puntajes: <http://127.0.0.1:8000/ranking>
 
 El servidor escucha solo en loopback y no tiene autenticación: está pensado para
 la misma máquina que hace de OBS.
