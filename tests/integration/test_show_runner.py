@@ -435,3 +435,22 @@ class TestPlanTransitions:
             await session.commit()
 
         assert (await new_runner()._plan(show_id)).step is Step.DONE
+
+
+class TestVoiceover:
+    """Opening a round is the moment a new question starts, so it speaks."""
+
+    async def test_opening_a_round_announces_the_question(
+        self, maker, new_runner, monkeypatch
+    ):
+        from app.services import show_runner as sr
+
+        calls: list[str | None] = []
+        monkeypatch.setattr(sr, "notify_question", calls.append)
+
+        await make_show(maker, question_ids=(1,))
+        async with maker() as session:
+            rnd = (await session.execute(select(Round))).scalar_one()
+            await sr.open_round_now(session, rnd, FakeRegistry())
+
+        assert calls == ["Q1?"]

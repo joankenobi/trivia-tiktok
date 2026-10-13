@@ -37,6 +37,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from ..config import settings
 from ..domain.session import RoundStatus
 from ..infra.models import Round, Show
+from ..infra.tts import notify_question
 from . import session_service as svc
 
 log = logging.getLogger(__name__)
@@ -101,6 +102,10 @@ async def open_round_now(
     opened = await svc.open_round(session, rnd.id, cursor)
     if registry is not None:
         registry.start(opened.id, show.room_id)
+    # A round opening is the moment a new question starts, so the voiceover is
+    # triggered here: both the runner and the manual route open rounds through
+    # this one function, so there is no second place to keep in sync.
+    notify_question(opened.question.text if opened.question else None)
     return opened
 
 

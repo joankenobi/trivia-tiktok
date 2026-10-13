@@ -34,6 +34,11 @@ class Settings(BaseSettings):
     avatars_dir: Path = WEB_DIR / "avatars"
     avatar_timeout_s: float = 5.0
 
+    # TTS voice service. Each new question's text is posted here so it can be
+    # read aloud. Defaults to the same host as the lives API.
+    tts_api_base_url: str = "http://127.0.0.1:8081"
+    tts_api_timeout_s: float = 5.0
+
     # Autoplay: how long a round accepts votes, and how long the answer stays on
     # screen before the next question opens. Both are part of the pacing the
     # audience sees, so they are configuration and not literals in the runner.
