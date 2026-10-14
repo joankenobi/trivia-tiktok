@@ -6,8 +6,10 @@ import {
   firstCorrectResponder,
   LETTERS,
   formatSeconds,
+  rankOffsets,
   remainingSeconds,
 } from "/js/common.js";
+import { playRandomPushSound, preloadPushSounds } from "/js/sounds.js";
 
 const $ = (id) => document.getElementById(id);
 let showId = null;
@@ -19,11 +21,31 @@ let finalRendered = false;
 // animates) when this changes.
 let announcedKey = null;
 
+// The rank panel shows the podium contenders, not the whole field.
+const RANK_SIZE = 4;
+// Must equal `.o-rank-row` height (54) + `.o-rank-list` gap (8) in overlay.css:
+// the swap moves a row by whole positions, so a CSS change on one side without
+// the other would leave every row off by a slice of a row.
+const RANK_PITCH = 62;
+// The ranking lags the reveal toast so the two cues do not collide.
+const RANK_DELAY_MS = 1200;
+
+// The round whose ranking was last built. This is the flicker guard for the
+// swap: the 1s poll must not replay the animation for a reveal already drawn.
+let rankRoundId = null;
+// The order the last swap drew FROM. Null means the first reveal, where there
+// is nothing to animate from.
+let prevRankIds = null;
+let rankTimer = null;
+
 /**
  * The overlay has no UI, so it resolves the show itself:
  * ?show_id=... pins it, otherwise the newest show wins.
  */
 async function discover() {
+  // Warm the sound list and the Audio objects while the first polls run, so the
+  // first reveal is not the request that fetches them.
+  preloadPushSounds();
   const pinned = new URLSearchParams(location.search).get("show_id");
   if (pinned) {
     showId = Number(pinned);
@@ -91,6 +113,9 @@ function renderFirstCorrect(round) {
   const key = firstCorrectKey(round, winner);
   if (key === announcedKey) return;
   announcedKey = key;
+  // A new toast is on screen: pair it with a sound cue. Fired here, not on
+  // every poll, because this is the exact point the animation starts.
+  playRandomPushSound();
 
   const card = document.createElement("div");
   card.className = "o-fc-card";
@@ -131,6 +156,105 @@ function hideFirstCorrect() {
 }
 
 /**
+ * Decide, from the round alone, whether the rank panel is due.
+ *
+ * Only a revealed round qualifies ("solo tras el cartel"): before the answer is
+ * on screen the ordering is not final, and on a pending or open round there is
+ * nothing to trade. The reveal itself is delayed so the toast lands first;
+ * `rankRoundId` is the flicker guard, since `render()` reruns every second.
+ */
+function renderRanking(round) {
+  if (!round || round.status !== "revealed") {
+    hideRanking();
+    return;
+  }
+  if (rankRoundId === round.id) return;
+  rankRoundId = round.id;
+  hideRanking();
+  rankTimer = setTimeout(() => {
+    rankTimer = null;
+    showRanking();
+  }, RANK_DELAY_MS);
+}
+
+function hideRanking() {
+  if (rankTimer !== null) {
+    clearTimeout(rankTimer);
+    rankTimer = null;
+  }
+  $("o-rank").classList.add("hidden");
+}
+
+/**
+ * Fetch and reveal the leaderboard. Deliberately has no catch that surfaces an
+ * error: a ranking that cannot be fetched is not worth a broken overlay, so it
+ * simply stays hidden and the next reveal tries again.
+ */
+async function showRanking() {
+  if (!showId) return;
+  let rows;
+  try {
+    rows = await api(`/shows/${showId}/ranking`);
+  } catch {
+    return; // transient error: leave the panel hidden
+  }
+  if (!Array.isArray(rows) || rows.length === 0) return;
+  $("o-rank").classList.remove("hidden");
+  renderRankList(rows);
+  playRandomPushSound();
+}
+
+/**
+ * Draw the top rows, then animate them from where they were to where they are.
+ *
+ * The trick is two writes with a reflow between them: rows are laid out at the
+ * offset they held in `prevRankIds`, the browser is forced to commit that (and
+ * the freshly created nodes), and only then is the transform cleared so the CSS
+ * transition has somewhere to travel from. Without the reflow both writes land
+ * in the same style recalc and the swap does not animate.
+ */
+function renderRankList(rows) {
+  const top = rows.slice(0, RANK_SIZE);
+  const offsets = rankOffsets(prevRankIds, top, RANK_PITCH);
+  const list = $("o-rank-list");
+  list.innerHTML = "";
+
+  top.forEach((row, i) => {
+    const li = document.createElement("li");
+    li.className = "o-rank-row";
+
+    const pos = document.createElement("span");
+    pos.className = "o-rank-pos";
+    pos.textContent = i + 1;
+
+    const pic = avatarEl(row, "");
+    pic.classList.add("o-rank-avatar");
+
+    const name = document.createElement("span");
+    name.className = "o-rank-name";
+    name.textContent = row.nickname || row.unique_id || "";
+
+    const points = document.createElement("span");
+    points.className = "o-rank-points";
+    points.textContent = row.points;
+
+    li.append(pos, pic, name, points);
+    // Start at the OLD spot; the stagger keeps a multi-row shuffle readable.
+    li.style.transform = `translateY(${offsets[i]}px)`;
+    li.style.transitionDelay = `${i * 90}ms`;
+    list.append(li);
+  });
+
+  void list.offsetHeight; // commit the starting transforms before clearing them
+  list.querySelectorAll(".o-rank-row").forEach((el) => {
+    el.style.transform = "";
+  });
+
+  // Remember this order as the origin of the NEXT swap.
+  prevRankIds = top.map((r) => r.unique_id);
+}
+
+/**
  * Show the winner board once the runner marks the show finished. Autoplay means
  * nobody closes the browser to trigger a state change, so the last question
  * would otherwise just sit on screen forever.
@@ -146,6 +270,12 @@ async function renderFinal(show) {
   // print underneath it. It runs before the `finalRendered` short circuit
   // because the podium is what retires the announcement, not the fetch.
   hideFirstCorrect();
+  // The podium retires the rank panel too. This runs on every finished poll and
+  // not just the first: it also clears the rank reveal the poll just scheduled,
+  // which would otherwise fire over the podium a moment later.
+  hideRanking();
+  rankRoundId = null;
+  prevRankIds = null;
   if (finalRendered) return;
   box.classList.remove("hidden");
   let rows = [];
@@ -229,6 +359,7 @@ function render(round) {
         : `Correcta: ${round.correct_option}`;
 
   renderFirstCorrect(round);
+  renderRanking(round);
 }
 
 setInterval(() => {

@@ -128,4 +128,37 @@ export function avatarEl(voter, cls = "avatar") {
   return img;
 }
 
+/**
+ * Where each row of a NEW ranking should start before it slides into place.
+ *
+ * The overlay animates the leaderboard by laying every row out at the spot it
+ * held in the previous poll and then clearing the transform, so a CSS transition
+ * carries it to its new spot. This is that starting offset in px:
+ * `(oldIndex - newIndex) * pitch`. Positive means the row came from below.
+ *
+ * A row absent from `prevIds` is a newcomer with no past to move from, so it
+ * starts where it already is (`0`). A null or empty `prevIds` is the first
+ * reveal: every row is a newcomer and nothing animates.
+ */
+export function rankOffsets(prevIds, rows, pitch) {
+  if (!prevIds || prevIds.length === 0) return rows.map(() => 0);
+  return rows.map((row, newIndex) => {
+    const oldIndex = prevIds.indexOf(row.unique_id);
+    return oldIndex === -1 ? 0 : (oldIndex - newIndex) * pitch;
+  });
+}
+
+/**
+ * One element of `list` at random, or null when there is nothing to pick.
+ *
+ * The RNG is injected so a test can seed it, and it is consumed exactly once.
+ * The index is clamped because a misbehaving `rnd()` -- 1.0, or negative --
+ * must never index past the ends of the array.
+ */
+export function pickRandom(list, rnd = Math.random) {
+  if (!list || list.length === 0) return null;
+  const index = Math.floor(rnd() * list.length);
+  return list[Math.min(list.length - 1, Math.max(0, index))];
+}
+
 export { LETTERS };

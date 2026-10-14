@@ -15,6 +15,12 @@
   <!-- First correct responder. Empty until the reveal frame announces someone;
        the card itself is built in overlay.js so it only exists when it animates. -->
   <div id="o-first-correct" class="o-first-correct hidden"></div>
+  <!-- Ranking swap. Hidden until a reveal; the rows are built in overlay.js so a
+       position change can animate from the old order to the new one. -->
+  <div id="o-rank" class="o-rank hidden">
+    <p class="o-rank-title">Ranking</p>
+    <ol id="o-rank-list" class="o-rank-list"></ol>
+  </div>
   <div id="o-final" class="o-final hidden">
     <p class="o-final-title">Fin de la partida</p>
     <ol id="o-final-list" class="o-final-list"></ol>

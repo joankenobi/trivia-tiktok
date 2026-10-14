@@ -19,6 +19,7 @@ from fastapi.responses import FileResponse
 
 from .api.routes import lives as lives_routes
 from .api.routes import rounds as rounds_routes
+from .api.routes import sounds as sounds_routes
 from .api.routes import tally as tally_routes
 from .config import WEB_DIR, settings
 from .db import SessionLocal, dispose_engine, init_models
@@ -101,6 +102,7 @@ def create_app() -> FastAPI:
     api = APIRouter(prefix="/api/v1")
     api.include_router(lives_routes.router)
     api.include_router(rounds_routes.router)
+    api.include_router(sounds_routes.router)
     api.include_router(tally_routes.router)
     app.include_router(api)
 

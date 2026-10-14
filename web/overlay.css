@@ -230,6 +230,105 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
 }
 
+/* Leaderboard swap. Hidden until a reveal, then the top rows trade places with a
+   transform transition. The row height (54px) plus the list gap (8px) is the
+   62px RANK_PITCH overlay.js animates by; keep the three values in sync. */
+.o-rank {
+  align-self: flex-start;
+  width: min(420px, 100%);
+  padding: 14px 18px 16px;
+  background: rgba(14, 17, 22, .86);
+  border: 2px solid rgba(255, 255, 255, .16);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .55);
+}
+
+.o-rank-title {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+}
+
+.o-rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.o-rank-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 54px;
+  padding: 0 14px 0 8px;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 10px;
+  transition: transform .6s cubic-bezier(.2, .85, .25, 1);
+}
+
+.o-rank-pos {
+  flex: 0 0 26px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #cbd5e1;
+}
+
+/* Avatar slot. Same shape as the toast's, so a row and a reconcile read alike;
+   the `.avatar-fallback` class is what avatarEl uses for a missing image. */
+.o-rank-avatar {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .35);
+  background: #22272e;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.o-rank-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.o-rank-avatar.avatar-fallback {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  background: #3a4250;
+}
+
+.o-rank-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.o-rank-points {
+  font-size: 23px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .75);
+}
+
+/* A viewer who asked for less motion still sees the new order, just placed
+   instantly instead of sliding. */
+@media (prefers-reduced-motion: reduce) {
+  .o-rank-row { transition: none; }
+}
+
 /* End-of-show podium. Replaces the option grid visually by sitting on top of it,
    so the final frame reads as a result and not as another question. */
 .o-final {

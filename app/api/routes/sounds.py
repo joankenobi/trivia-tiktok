@@ -1,0 +1,31 @@
+"""Push-sound listing endpoint.
+
+The overlay plays one sound at random from a static folder every time an
+animation runs, but a browser cannot enumerate a directory. This route hands it
+the list; the static host serves the files themselves from the same path.
+"""
+
+from __future__ import annotations
+
+from fastapi import APIRouter
+
+from ...config import WEB_DIR
+
+router = APIRouter(tags=["sounds"])
+
+# Only these are audio the overlay can play. Anything else the user drops in the
+# folder (a readme, a cover image) must not be handed to `new Audio()`.
+SOUND_SUFFIXES = {".mp3", ".wav"}
+
+
+@router.get("/sounds/pushPlayer")
+async def list_push_sounds() -> dict:
+    directory = WEB_DIR / "sounds" / "pushPlayer"
+    if not directory.is_dir():
+        return {"sounds": []}
+    names = sorted(
+        entry.name
+        for entry in directory.iterdir()
+        if entry.is_file() and entry.suffix.lower() in SOUND_SUFFIXES
+    )
+    return {"sounds": [f"/sounds/pushPlayer/{name}" for name in names]}
