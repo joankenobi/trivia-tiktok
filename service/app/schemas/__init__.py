@@ -1,5 +1,11 @@
 """Response/request schemas."""
 
+from app.schemas.audio import (
+    TTSRequest,
+    TTSResponse,
+    TTSVoiceRequest,
+    TTSVoiceResponse,
+)
 from app.schemas.batch import (
     Batch,
     BatchAck,
@@ -51,5 +57,9 @@ __all__ = [
     "LikeContent",
     "LikeData",
     "LikeEvent",
+    "TTSRequest",
+    "TTSResponse",
+    "TTSVoiceRequest",
+    "TTSVoiceResponse",
     "UserInfo",
 ]
