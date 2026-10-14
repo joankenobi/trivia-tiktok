@@ -229,11 +229,43 @@ class TestFirstResponderScore:
 class TestScoring:
     async def test_correct_scores_base_plus_speed_bonus(self, session, round_):
         opened = round_.opened_at.replace(tzinfo=timezone.utc)
-        await svc.ingest_event(session, round_, comment_at(1001, opened + timedelta(seconds=5), "A"))
+        # The clock starts on the first answer, so a "5s slow" answer requires a
+        # first buzzer to open the clock at `opened`. Both events sit above the
+        # round's opened_cursor (1000).
+        await svc.ingest_event(
+            session, round_, comment_at(1001, opened, "B", uid="buzzer")
+        )
+        await svc.ingest_event(
+            session, round_, comment_at(1002, opened + timedelta(seconds=5), "A")
+        )
         rnd = await svc.close_round(session, round_.id)
-        answer = (await answers_for(session, rnd))[0]
+        answer = next(a for a in await answers_for(session, rnd) if a.event_id == 1002)
         base = DIFF_BASE["medium"]
         assert answer.points == base + int(base * 0.5 * 0.5)
+
+    async def test_first_answer_is_instant_full_bonus_later_answer_less(
+        self, session, round_
+    ):
+        """The first answer opens the clock at elapsed 0 and earns the full bonus.
+
+        A later answer is measured against that same first answer, so it earns a
+        smaller bonus. This is the whole point of re-anchoring the clock: a late
+        first answer must not zero out everyone else's speed bonus.
+        """
+        opened = round_.opened_at.replace(tzinfo=timezone.utc)
+        await svc.ingest_event(
+            session, round_, comment_at(1001, opened, "A", uid="first")
+        )
+        await svc.ingest_event(
+            session, round_, comment_at(1002, opened + timedelta(seconds=5), "A", uid="late")
+        )
+        rnd = await svc.close_round(session, round_.id)
+        first, late = sorted(await answers_for(session, rnd), key=lambda a: a.event_id)
+        base = DIFF_BASE["medium"]
+        assert first.elapsed_ms == 0
+        assert first.points == base + int(base * 0.5)
+        assert late.elapsed_ms > 0
+        assert late.points < first.points
 
     async def test_instant_correct_gets_full_bonus(self, session, round_):
         opened = round_.opened_at.replace(tzinfo=timezone.utc)
@@ -352,6 +384,51 @@ class TestUsers:
         await svc.ingest_event(session, round_, comment(1001, "A", uid="anon", nickname=""))
         user = (await session.execute(select(User))).scalar_one()
         assert user.nickname == "anon"
+
+
+class TestSchemaMigration:
+    """`init_models` upgrades an existing DB; there is no migration framework."""
+
+    def test_adds_first_answer_at_to_a_legacy_rounds_table(self, tmp_path):
+        from sqlalchemy import create_engine
+
+        from app.db import _ensure_first_answer_at
+
+        engine = create_engine(f"sqlite:///{tmp_path / 'legacy.db'}")
+        with engine.begin() as conn:
+            conn.exec_driver_sql(
+                "CREATE TABLE rounds (id INTEGER PRIMARY KEY, opened_at DATETIME)"
+            )
+            conn.exec_driver_sql(
+                "INSERT INTO rounds (id, opened_at) VALUES (1, '2020-01-01')"
+            )
+            _ensure_first_answer_at(conn)
+
+        with engine.begin() as conn:
+            cols = [
+                r[1]
+                for r in conn.exec_driver_sql("PRAGMA table_info(rounds)").fetchall()
+            ]
+            kept = conn.exec_driver_sql("SELECT id FROM rounds").fetchall()
+        engine.dispose()
+
+        assert "first_answer_at" in cols
+        assert kept == [(1,)]  # no data loss
+
+    def test_is_idempotent_when_the_column_already_exists(self, tmp_path):
+        from sqlalchemy import create_engine
+
+        from app.db import _ensure_first_answer_at
+
+        engine = create_engine(f"sqlite:///{tmp_path / 'twice.db'}")
+        with engine.begin() as conn:
+            conn.exec_driver_sql(
+                "CREATE TABLE rounds (id INTEGER PRIMARY KEY, first_answer_at DATETIME)"
+            )
+            # A second run must not raise "duplicate column name".
+            _ensure_first_answer_at(conn)
+            _ensure_first_answer_at(conn)
+        engine.dispose()
 
 
 class TestSeed:

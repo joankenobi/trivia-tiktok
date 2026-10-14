@@ -219,7 +219,15 @@ class ShowRunner:
                 (r for r in rounds if r.status == RoundStatus.OPEN.value), None
             )
             if opened is not None:
-                left = window_left(opened.opened_at, opened.question_time_limit_s)
+                if opened.first_answer_at is None:
+                    return Action(
+                        Step.WAIT,
+                        opened.id,
+                        settings.poll_interval_s,
+                    )
+                left = window_left(
+                    opened.first_answer_at, opened.question_time_limit_s
+                )
                 return Action(
                     Step.WAIT if left > 0 else Step.CLOSE, opened.id, left
                 )

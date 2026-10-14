@@ -42,11 +42,31 @@ async def get_session() -> AsyncIterator[AsyncSession]:
         yield session
 
 
+def _ensure_first_answer_at(sync_conn) -> None:
+    """Add `rounds.first_answer_at` to a database created before the column.
+
+    There is no migration framework, so this runs on every boot after
+    `create_all`; it reads the live schema and only alters when the column is
+    missing, which makes it idempotent and non-destructive to existing rows.
+    `run_sync` hands back a SQLAlchemy Connection, not a DBAPI one, so raw SQL
+    goes through `exec_driver_sql`.
+    """
+    cols = [
+        row[1]
+        for row in sync_conn.exec_driver_sql("PRAGMA table_info(rounds)").fetchall()
+    ]
+    if "first_answer_at" not in cols:
+        sync_conn.exec_driver_sql(
+            "ALTER TABLE rounds ADD COLUMN first_answer_at DATETIME"
+        )
+
+
 async def init_models() -> None:
     from .infra import models  # noqa: F401  (register mappers)
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(_ensure_first_answer_at)
 
 
 async def dispose_engine() -> None:

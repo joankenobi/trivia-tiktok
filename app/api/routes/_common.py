@@ -30,16 +30,21 @@ def _epoch_ms(dt: datetime | None) -> int | None:
 def deadline_epoch_ms(rnd: Round) -> int | None:
     """When the round leaves its current status, or None if it never will.
 
-    - `open` runs until `opened_at + question_time_limit_s`, which is exactly the
-      window the poller accepts votes for.
+    - `open` runs until `first_answer_at + question_time_limit_s` if the first
+      answer has landed; while nobody has answered it returns None (indefinite).
     - `revealed` runs until `closed_at + reveal_display_s`, how long the answer
       stays on screen before autoplay opens the next question.
 
     `closed` deliberately returns None: in autoplay it is a sub-tick state the
     clients never see, and by hand it means the host is deciding when to move on.
     """
-    if rnd.status == RoundStatus.OPEN.value and rnd.opened_at is not None:
-        return _epoch_ms(rnd.opened_at) + rnd.question_time_limit_s * 1000
+    if rnd.status == RoundStatus.OPEN.value:
+        if rnd.first_answer_at is not None:
+            return (
+                _epoch_ms(rnd.first_answer_at)
+                + rnd.question_time_limit_s * 1000
+            )
+        return None
     if rnd.status == RoundStatus.REVEALED.value and rnd.closed_at is not None:
         return _epoch_ms(rnd.closed_at) + int(settings.reveal_display_s * 1000)
     return None

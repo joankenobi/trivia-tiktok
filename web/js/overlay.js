@@ -1,15 +1,25 @@
 import {
   api,
   avatarEl,
-  currentRound,
+  correctCueDelayMs,
   firstCorrectKey,
   firstCorrectResponder,
+  isWaitingForFirstAnswer,
   LETTERS,
   formatSeconds,
+  pollView,
   rankOffsets,
   remainingSeconds,
+  waitingCueIntervalMs,
 } from "/js/common.js";
-import { playRandomPushSound, preloadPushSounds } from "/js/sounds.js";
+import {
+  playRandomCorrectSound,
+  playRandomPushSound,
+  preloadCorrectSounds,
+  preloadPushSounds,
+  preloadWaitingSounds,
+  playRandomWaitingSound,
+} from "/js/sounds.js";
 
 const $ = (id) => document.getElementById(id);
 let showId = null;
@@ -42,10 +52,91 @@ let rankTimer = null;
  * The overlay has no UI, so it resolves the show itself:
  * ?show_id=... pins it, otherwise the newest show wins.
  */
+let waitingRoundId = null;
+let waitingTimer = null;
+
+// The round whose correct-answer cue was already scheduled. The 1s poll reruns
+// `render()`, so this is what keeps the cue to once per reveal. `correctTimer`
+// holds the delayed shot that follows the winner jingle.
+let revealedRoundId = null;
+let correctTimer = null;
+
+function startWaitingCue(limitS) {
+  if (waitingTimer) {
+    clearInterval(waitingTimer);
+    waitingTimer = null;
+  }
+  const interval = waitingCueIntervalMs(limitS);
+  if (!interval || interval <= 0) {
+    waitingTimer = null;
+    return;
+  }
+  waitingTimer = setInterval(() => {
+    playRandomWaitingSound();
+  }, interval);
+}
+
+function stopWaitingCue() {
+  if (waitingTimer) {
+    clearInterval(waitingTimer);
+    waitingTimer = null;
+  }
+  waitingRoundId = null;
+}
+
+function renderWaitingCue(round) {
+  if (!isWaitingForFirstAnswer(round)) {
+    stopWaitingCue();
+    return;
+  }
+  if (waitingRoundId === round.id) {
+    return;
+  }
+  waitingRoundId = round.id;
+  startWaitingCue(round.question_time_limit_s);
+}
+
+/**
+ * Play the correct-answer cue exactly once per revealed round.
+ *
+ * The cue fires on EVERY reveal, winner or not. With a winner the jingle lands
+ * first and the cue waits `CORRECT_CUE_DELAY_MS` so the two never stack; with
+ * nobody correct it fires immediately. `revealedRoundId` is the flicker guard:
+ * the poll rebuilds `render()` every second and must not replay the cue.
+ */
+function renderCorrectCue(round) {
+  const reveal = !!round && round.status === "revealed" && !!round.correct_option;
+  if (!reveal) {
+    stopCorrectCue();
+    return;
+  }
+  if (revealedRoundId === round.id) return;
+  revealedRoundId = round.id;
+  stopCorrectCue();
+  const delay = correctCueDelayMs(!!firstCorrectResponder(round));
+  if (delay === 0) {
+    playRandomCorrectSound();
+    return;
+  }
+  correctTimer = setTimeout(() => {
+    correctTimer = null;
+    playRandomCorrectSound();
+  }, delay);
+}
+
+function stopCorrectCue() {
+  if (correctTimer !== null) {
+    clearTimeout(correctTimer);
+    correctTimer = null;
+  }
+}
+
 async function discover() {
   // Warm the sound list and the Audio objects while the first polls run, so the
   // first reveal is not the request that fetches them.
   preloadPushSounds();
+  preloadWaitingSounds();
+  preloadCorrectSounds();
   const pinned = new URLSearchParams(location.search).get("show_id");
   if (pinned) {
     showId = Number(pinned);
@@ -71,10 +162,19 @@ async function refresh() {
     return; // transient network error: keep the last frame on screen
   }
 
-  const current = currentRound(show.rounds);
-  if (!current) return;
-  render(current);
-  renderTimer(current);
+  const view = pollView(show);
+  if (view.mode === "final") {
+    // The podium owns the screen once the show ends. Redrawing the last round
+    // here would re-run its reveal on every poll, retriggering the toast and
+    // the rank swap -- each with its own sound cue -- about once per second.
+    renderFinal(show);
+    return;
+  }
+  if (view.mode === "idle") return;
+
+  render(view.round);
+  renderTimer(view.round);
+  renderWaitingCue(view.round);
   renderFinal(show);
 }
 
@@ -270,12 +370,14 @@ async function renderFinal(show) {
   // print underneath it. It runs before the `finalRendered` short circuit
   // because the podium is what retires the announcement, not the fetch.
   hideFirstCorrect();
-  // The podium retires the rank panel too. This runs on every finished poll and
-  // not just the first: it also clears the rank reveal the poll just scheduled,
-  // which would otherwise fire over the podium a moment later.
+  // The podium retires the rank panel too. Both guards are reset here -- not
+  // merely hidden -- so the NEXT show announces and swaps from a clean slate:
+  // a stale round id or a stale toast key would silence its first reveal.
   hideRanking();
   rankRoundId = null;
   prevRankIds = null;
+  stopWaitingCue();
+  stopCorrectCue();
   if (finalRendered) return;
   box.classList.remove("hidden");
   let rows = [];
@@ -360,6 +462,7 @@ function render(round) {
 
   renderFirstCorrect(round);
   renderRanking(round);
+  renderCorrectCue(round);
 }
 
 setInterval(() => {

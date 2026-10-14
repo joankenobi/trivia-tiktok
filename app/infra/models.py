@@ -44,7 +44,7 @@ class User(Base):
     avatar_path: Mapped[str | None] = mapped_column(String(512), nullable=True)
     first_seen_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
 
-    answers: Mapped[list["Answer"]] = relationship(back_populates="user")
+    answers: Mapped[list[Answer]] = relationship(back_populates="user")
 
 
 class Question(Base):
@@ -75,7 +75,7 @@ class Show(Base):
     status: Mapped[str] = mapped_column(String(16), default="active")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
 
-    rounds: Mapped[list["Round"]] = relationship(
+    rounds: Mapped[list[Round]] = relationship(
         back_populates="show",
         cascade="all, delete-orphan",
         lazy="selectin",
@@ -92,6 +92,9 @@ class Round(Base):
     status: Mapped[str] = mapped_column(String(16), default="open")
     opened_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
     closed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    first_answer_at: Mapped[datetime | None] = mapped_column(
+        DateTime, nullable=True
+    )
 
     # Window boundaries keyed on the upstream monotonic event_id, not on time.
     opened_cursor: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -101,12 +104,12 @@ class Round(Base):
     correct_option: Mapped[str | None] = mapped_column(String(1), nullable=True)
     tally_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
-    show: Mapped["Show"] = relationship(back_populates="rounds")
+    show: Mapped[Show] = relationship(back_populates="rounds")
     # selectin, not the default lazy: the API serializes a Round together with its
     # question. A lazy load there would emit SQL from sync serializer code and
     # raise MissingGreenlet on the async engine.
-    question: Mapped["Question"] = relationship(lazy="selectin")
-    answers: Mapped[list["Answer"]] = relationship(
+    question: Mapped[Question] = relationship(lazy="selectin")
+    answers: Mapped[list[Answer]] = relationship(
         back_populates="round", cascade="all, delete-orphan"
     )
 
@@ -134,5 +137,5 @@ class Answer(Base):
     ts_epoch_us: Mapped[int] = mapped_column(Integer, default=0)
     answered_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
 
-    round: Mapped["Round"] = relationship(back_populates="answers")
-    user: Mapped["User"] = relationship(back_populates="answers")
+    round: Mapped[Round] = relationship(back_populates="answers")
+    user: Mapped[User] = relationship(back_populates="answers")

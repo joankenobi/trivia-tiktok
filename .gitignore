@@ -11,5 +11,6 @@ trivia_game.db
 *.db
 web/avatars/*
 !web/avatars/.gitkeep
-web/sounds/pushPlayer/*
+web/sounds/*/*
+!web/sounds/*/.gitkeep
 .atl

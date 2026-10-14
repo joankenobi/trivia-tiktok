@@ -2,6 +2,19 @@ const API = "/api/v1";
 const LETTERS = ["A", "B", "C", "D"];
 
 /**
+ * Compose a full API URL.
+ *
+ * Callers pass the path AFTER the prefix (`"/shows/1"`), never a full
+ * `"/api/v1/..."` path. Handing in the prefixed path built
+ * `"/api/v1/api/v1/..."`, which 404'd into a swallow-everything catch: the
+ * overlay went silent with no error anywhere. This helper exists so that rule
+ * is testable in one place.
+ */
+export function apiUrl(path) {
+  return `${API}${path}`;
+}
+
+/**
  * A countdown timer driven by the server's clock, not the local one.
  *
  * The server sends `deadline_epoch_ms` and `server_epoch_ms` for the same
@@ -36,6 +49,22 @@ export function currentRound(rounds) {
     ordered.find((r) => r.status === "open") ||
     [...ordered].reverse().find((r) => r.status !== "pending")
   );
+}
+
+/**
+ * What one poll should draw for this show payload: the active round, the final
+ * podium, or nothing at all.
+ *
+ * A finished show must never take the "round" path again. The podium owns the
+ * screen from then on, and re-drawing the last round would re-run its reveal on
+ * every poll -- retriggering the toast and the rank swap, each with its own
+ * sound cue, once per second for the whole final board.
+ */
+export function pollView(show) {
+  if (!show) return { mode: "idle", round: null };
+  if (show.status === "finished") return { mode: "final", round: null };
+  const round = currentRound(show.rounds);
+  return round ? { mode: "round", round } : { mode: "idle", round: null };
 }
 
 /**
@@ -95,7 +124,7 @@ export function roomFillPlan(live) {
 }
 
 export async function api(path, options = {}) {
-  const res = await fetch(`${API}${path}`, {
+  const res = await fetch(apiUrl(path), {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
@@ -155,6 +184,38 @@ export function rankOffsets(prevIds, rows, pitch) {
  * The index is clamped because a misbehaving `rnd()` -- 1.0, or negative --
  * must never index past the ends of the array.
  */
+export function isWaitingForFirstAnswer(round) {
+  return !!round && round.status === "open" && !round.deadline_epoch_ms;
+}
+
+/**
+ * The gap before the correct-answer cue when a winner jingle is already playing.
+ *
+ * A reveal can announce a first-correct winner ("¡Primero en acertar!"), and
+ * that toast owns the moment. The correct cue waits this long so the two never
+ * start together. It is tunable: it is the only knob for that spacing.
+ */
+export const CORRECT_CUE_DELAY_MS = 1500;
+
+/**
+ * How long the correct-answer cue waits before it plays on a reveal.
+ *
+ * Zero when nobody answered correctly: the answer is revealed regardless of the
+ * toast, so the cue must fire right away. With a winner, `CORRECT_CUE_DELAY_MS`
+ * keeps it from stacking on the jingle. Pure, so plain node can check both.
+ */
+export function correctCueDelayMs(hasWinner) {
+  return hasWinner ? CORRECT_CUE_DELAY_MS : 0;
+}
+
+export function waitingCueIntervalMs(questionTimeLimitS) {
+  const limit = Number(questionTimeLimitS);
+  if (!Number.isFinite(limit) || limit <= 0) {
+    return 0;
+  }
+  return 2 * limit * 1000;
+}
+
 export function pickRandom(list, rnd = Math.random) {
   if (!list || list.length === 0) return null;
   const index = Math.floor(rnd() * list.length);

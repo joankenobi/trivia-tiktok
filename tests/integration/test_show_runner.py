@@ -76,7 +76,12 @@ def fast_clock(monkeypatch):
 async def maker():
     fd, path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
-    engine = create_async_engine(f"sqlite+aiosqlite:///{path}")
+    engine = create_async_engine(
+        f"sqlite+aiosqlite:///{path}",
+        # The background viewer and the runner both write; without a busy
+        # timeout a concurrent commit fails outright on SQLite.
+        connect_args={"timeout": 30},
+    )
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -121,6 +126,63 @@ async def make_show(sessionmaker, question_ids=(1, 2, 3), limit_s: float = 0.05)
     async with sessionmaker() as session:
         show = await svc.create_show(session, "room-1", list(question_ids), limit_s)
         return show.id
+
+
+class FakeComment:
+    """Minimal `LiveComment` stand-in for the test viewer."""
+
+    def __init__(self, event_id: int, message: str, uid: str, ts_utc: datetime) -> None:
+        self.event_id = event_id
+        self.message = message
+        self.unique_id = uid
+        self.nickname = uid
+        self.avatar_url = None
+        self.ts_utc = ts_utc
+
+
+async def _feed_first_answers(sessionmaker, stop: asyncio.Event) -> None:
+    """Play the audience: answer every round that is waiting for a first vote.
+
+    The question timer starts on the first answer now, so a round nobody answers
+    never closes and the runner never reaches `finished`. A test that wants the
+    full show to run supplies this viewer in the background.
+    """
+    event_id = 100_000
+    while not stop.is_set():
+        try:
+            async with sessionmaker() as session:
+                rounds = (
+                    await session.execute(
+                        select(Round).where(Round.status == RoundStatus.OPEN.value)
+                    )
+                ).scalars().all()
+                for rnd in rounds:
+                    if rnd.first_answer_at is None:
+                        event_id += 1
+                        comment = FakeComment(
+                            event_id,
+                            "A",
+                            f"viewer-{rnd.id}",
+                            datetime.now(timezone.utc),
+                        )
+                        await svc.ingest_event(session, rnd, comment)
+                await session.commit()
+        except Exception:  # a lost race with the runner is retried next tick
+            pass
+        await asyncio.sleep(0.01)
+
+
+@pytest_asyncio.fixture
+async def answering_viewer(maker):
+    """Background viewer for tests that expect the runner to finish a show."""
+    stop = asyncio.Event()
+    task = asyncio.create_task(_feed_first_answers(maker, stop))
+    try:
+        yield
+    finally:
+        stop.set()
+        with contextlib.suppress(asyncio.CancelledError):
+            await task
 
 
 async def statuses(sessionmaker, show_id: int) -> list[str]:
@@ -179,7 +241,9 @@ class TestWindowLeft:
 
 
 class TestFullShowRunsItself:
-    async def test_runs_every_round_and_finishes(self, maker, new_runner):
+    async def test_runs_every_round_and_finishes(
+        self, maker, new_runner, answering_viewer
+    ):
         show_id = await make_show(maker)
 
         assert new_runner().start(show_id) is True
@@ -187,7 +251,9 @@ class TestFullShowRunsItself:
 
         assert await statuses(maker, show_id) == [RoundStatus.REVEALED.value] * 3
 
-    async def test_answer_stays_on_screen_between_rounds(self, maker, new_runner):
+    async def test_answer_stays_on_screen_between_rounds(
+        self, maker, new_runner, answering_viewer
+    ):
         """End-to-end timing: the gap between closes must cover the reveal hold.
 
         The status-only tests above cannot catch this. A round that is revealed
@@ -225,7 +291,9 @@ class TestFullShowRunsItself:
         # A second POST must not spawn a second task racing on the same rounds.
         assert runner.start(show_id) is False
 
-    async def test_runner_drains_before_freezing_each_round(self, maker, new_runner):
+    async def test_runner_drains_before_freezing_each_round(
+        self, maker, new_runner, answering_viewer
+    ):
         registry = FakeRegistry()
         show_id = await make_show(maker, question_ids=(1, 2))
 
@@ -238,7 +306,9 @@ class TestFullShowRunsItself:
         assert len(registry.stopped) == 2
         assert registry.primed == 1
 
-    async def test_show_starts_active_and_ends_finished(self, maker, new_runner):
+    async def test_show_starts_active_and_ends_finished(
+        self, maker, new_runner, answering_viewer
+    ):
         show_id = await make_show(maker, question_ids=(1,))
         assert await show_status(maker, show_id) == SHOW_ACTIVE
 
@@ -249,7 +319,9 @@ class TestFullShowRunsItself:
 class TestRunnerAdoptsManualWork:
     """The runner plans from the database, so a hand-driven round is not a conflict."""
 
-    async def test_adopts_a_round_opened_by_hand(self, maker, new_runner):
+    async def test_adopts_a_round_opened_by_hand(
+        self, maker, new_runner, answering_viewer
+    ):
         show_id = await make_show(maker, question_ids=(1,))
         async with maker() as session:
             rnd = (await session.execute(select(Round))).scalar_one()
@@ -281,16 +353,19 @@ class TestRunnerAdoptsManualWork:
 
 
 class TestResume:
-    async def test_resumes_a_show_left_mid_question(self, maker, new_runner):
+    async def test_resumes_a_show_left_mid_question(
+        self, maker, new_runner, answering_viewer
+    ):
         show_id = await make_show(maker, question_ids=(1, 2))
         async with maker() as session:
             rnd = (
                 await session.execute(select(Round).order_by(Round.position))
             ).scalars().first()
             await svc.open_round(session, rnd.id, opened_cursor=0)
-            # Backdate the open round so its window is already over: a restart must
-            # close it now, not grant a fresh full budget.
-            rnd.opened_at = rnd.opened_at - timedelta(hours=1)
+            # Backdate the first answer so the round's window is already over: a
+            # restart must close it now, not grant a fresh full budget. An OPEN
+            # round with no first answer never closes any more.
+            rnd.first_answer_at = rnd.opened_at - timedelta(hours=1)
             await session.commit()
 
         runner = new_runner()
@@ -391,11 +466,30 @@ class TestPlanTransitions:
         assert action.step is Step.OPEN
         assert action.round_id != first.id
 
-    async def test_plan_waits_while_a_window_is_open(self, maker, new_runner):
+    async def test_plan_waits_for_the_first_answer(self, maker, new_runner):
+        """A fresh open with no answer must WAIT, never close and never busy-loop.
+
+        `_apply` has no WAIT handler, so a zero delay would spin the runner at
+        100% CPU. The delay is the poll interval, not the (now irrelevant)
+        question window.
+        """
         show_id = await make_show(maker, question_ids=(1,))
         async with maker() as session:
             rnd = (await session.execute(select(Round))).scalar_one()
             await svc.open_round(session, rnd.id, opened_cursor=0)
+            assert rnd.first_answer_at is None
+
+        action = await new_runner()._plan(show_id)
+        assert action.step is Step.WAIT
+        assert action.delay_s > 0
+
+    async def test_plan_waits_while_the_window_is_still_open(self, maker, new_runner):
+        show_id = await make_show(maker, question_ids=(1,))
+        async with maker() as session:
+            rnd = (await session.execute(select(Round))).scalar_one()
+            await svc.open_round(session, rnd.id, opened_cursor=0)
+            rnd.first_answer_at = datetime.now(timezone.utc).replace(tzinfo=None)
+            await session.commit()
 
         action = await new_runner()._plan(show_id)
         assert action.step is Step.WAIT
@@ -406,7 +500,8 @@ class TestPlanTransitions:
         async with maker() as session:
             rnd = (await session.execute(select(Round))).scalar_one()
             await svc.open_round(session, rnd.id, opened_cursor=0)
-            rnd.opened_at = rnd.opened_at - timedelta(hours=1)
+            # The clock is the first answer now, so backdate that, not opened_at.
+            rnd.first_answer_at = rnd.opened_at - timedelta(hours=1)
             await session.commit()
 
         assert (await new_runner()._plan(show_id)).step is Step.CLOSE

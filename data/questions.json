@@ -4,182 +4,2401 @@
     {
       "type": "multiple",
       "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital de Venezuela?",
+      "correct_answer": "Caracas",
+      "incorrect_answers": [
+        "Valencia",
+        "Maracaibo",
+        "Barquisimeto"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el salto de agua más alto del mundo, ubicado en Venezuela?",
+      "correct_answer": "Salto Ángel",
+      "incorrect_answers": [
+        "Salto Kukenan",
+        "Cataratas del Iguazú",
+        "Salto de Llovizna"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cuál de los siguientes es un plato tradicional venezolano hecho a base de masa de maíz asada o frita?",
+      "correct_answer": "Arepa",
+      "incorrect_answers": [
+        "Pupusa",
+        "Taco",
+        "Empanada gallega"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "history",
+      "question": "¿Quién es conocido como el 'Libertador' de Venezuela?",
+      "correct_answer": "Simón Bolívar",
+      "incorrect_answers": [
+        "Francisco de Miranda",
+        "José Antonio Páez",
+        "Antonio José de Sucre"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Qué famoso fenómeno meteorológico de relámpagos ocurre en el lago de Maracaibo?",
+      "correct_answer": "Relámpago del Catatumbo",
+      "incorrect_answers": [
+        "Trueno del Guri",
+        "Rayo del Orinoco",
+        "Centella de Coro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el plato nacional venezolano que lleva arroz blanco, carne desmechada, caraotas negras y tajadas?",
+      "correct_answer": "Pabellón criollo",
+      "incorrect_answers": [
+        "Bandeja paisa",
+        "Sancocho criollo",
+        "Hallaca completa"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
       "category": "general",
-      "question": "¿Cuál es la respuesta a la vida, el universo y todo lo demás?",
-      "correct_answer": "42",
+      "question": "¿Cuál es la moneda oficial de Venezuela?",
+      "correct_answer": "Bolívar",
       "incorrect_answers": [
-        "24",
-        "7",
-        "100"
-      ],
-      "explanation": "Es 42, de la Guía del Viajero Galáctico."
-    },
-    {
-      "type": "multiple",
-      "difficulty": "easy",
-      "category": "ciencia",
-      "question": "¿Qué gas compone la mayor parte de la atmósfera terrestre?",
-      "correct_answer": "Nitrógeno",
-      "incorrect_answers": [
-        "Oxígeno",
-        "Dióxido de carbono",
-        "Argón"
+        "Peso",
+        "Sol",
+        "Sucre"
       ]
     },
     {
       "type": "multiple",
       "difficulty": "easy",
-      "category": "geografía",
-      "question": "¿Cuál es la capital de Francia?",
-      "correct_answer": "París",
+      "category": "geography",
+      "question": "¿Con qué océano/mar limita Venezuela al norte?",
+      "correct_answer": "Mar Caribe",
       "incorrect_answers": [
-        "Berlín",
-        "Madrid",
-        "Roma"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "medium",
-      "category": "ciencia",
-      "question": "¿Qué planeta es conocido como el planeta rojo?",
-      "correct_answer": "Marte",
-      "incorrect_answers": [
-        "Venus",
-        "Júpiter",
-        "Saturno"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "medium",
-      "category": "literatura",
-      "question": "¿Quién escribió '1984'?",
-      "correct_answer": "Orwell",
-      "incorrect_answers": [
-        "Huxley",
-        "Dick",
-        "Bradbury"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "medium",
-      "category": "animales",
-      "question": "¿Cuál es el animal terrestre más rápido?",
-      "correct_answer": "Cheetá",
-      "incorrect_answers": [
-        "Gacela",
-        "Antílope",
-        "Ñu"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "hard",
-      "category": "historia",
-      "question": "¿En qué año llegó el Apolo 11 a la Luna?",
-      "correct_answer": "1969",
-      "incorrect_answers": [
-        "1968",
-        "1970",
-        "1971"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "hard",
-      "category": "química",
-      "question": "¿Cuál es el símbolo químico del oro?",
-      "correct_answer": "Au",
-      "incorrect_answers": [
-        "Ag",
-        "Pb",
-        "Fe"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "hard",
-      "category": "química",
-      "question": "¿Qué elemento tiene número atómico 1?",
-      "correct_answer": "Hidrógeno",
-      "incorrect_answers": [
-        "Helio",
-        "Litio",
-        "Boro"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "hard",
-      "category": "geografía",
-      "question": "¿Cuál es el océano más grande de la Tierra?",
-      "correct_answer": "Pacífico",
-      "incorrect_answers": [
-        "Atlántico",
-        "Índico",
-        "Ártico"
+        "Océano Pacífico",
+        "Golfo de México",
+        "Océano Índico"
       ]
     },
     {
       "type": "multiple",
       "difficulty": "easy",
-      "category": "matemáticas",
-      "question": "¿Cuántos lados tiene un hexágono?",
-      "correct_answer": "6",
+      "category": "culture",
+      "question": "¿Cuál es el baile folclórico y género musical nacional de Venezuela?",
+      "correct_answer": "Joropo",
       "incorrect_answers": [
-        "5",
-        "7",
-        "8"
+        "Cumbia",
+        "Merengue",
+        "Samba"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el árbol nacional de Venezuela?",
+      "correct_answer": "Araguaney",
+      "incorrect_answers": [
+        "Mora",
+        "Samán",
+        "Bucare"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el ave nacional de Venezuela?",
+      "correct_answer": "Turpial",
+      "incorrect_answers": [
+        "Guacamaya roja",
+        "Colibrí",
+        "Cóndor"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué plato tradicional se consume típicamente en Venezuela durante la época navideña?",
+      "correct_answer": "Hallaca",
+      "incorrect_answers": [
+        "Tamal",
+        "Pan de bono",
+        "Asado negro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿En qué estado venezolano se encuentran los Médanos de Coro?",
+      "correct_answer": "Falcón",
+      "incorrect_answers": [
+        "Zulia",
+        "Lara",
+        "Anzoátegui"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la isla más grande de Venezuela, conocida por sus playas y turismo?",
+      "correct_answer": "Isla de Margarita",
+      "incorrect_answers": [
+        "Isla de Coche",
+        "Cayo Sombrero",
+        "Isla Zapara"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama la flor nacional de Venezuela?",
+      "correct_answer": "Orquídea",
+      "incorrect_answers": [
+        "Rosa",
+        "Girasol",
+        "Lirio"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es el río más largo e importante de Venezuela?",
+      "correct_answer": "Río Orinoco",
+      "incorrect_answers": [
+        "Río Caroní",
+        "Río Apure",
+        "Río Torbes"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Qué instrumento musical tradicional de cuatro cuerdas es fundamental en la música folclórica venezolana?",
+      "correct_answer": "Cuatro",
+      "incorrect_answers": [
+        "Ukelele",
+        "Mandolina",
+        "Bandola"
       ]
     },
     {
       "type": "multiple",
       "difficulty": "medium",
-      "category": "arte",
-      "question": "¿Quién pintó la Mona Lisa?",
-      "correct_answer": "Da Vinci",
+      "category": "geography",
+      "question": "¿Cuál es la cima o punto más alto de Venezuela?",
+      "correct_answer": "Pico Bolívar",
       "incorrect_answers": [
-        "Van Gogh",
-        "Picasso",
-        "Miguel Ángel"
-      ]
-    },
-    {
-      "type": "multiple",
-      "difficulty": "hard",
-      "category": "ciencia",
-      "question": "¿Cuántos huesos tiene el cuerpo humano adulto?",
-      "correct_answer": "206",
-      "incorrect_answers": [
-        "186",
-        "226",
-        "246"
+        "Pico Humboldt",
+        "Pico Naiguatá",
+        "Monte Roraima"
       ]
     },
     {
       "type": "multiple",
       "difficulty": "medium",
-      "category": "geografía",
-      "question": "¿Cuál es el río más largo del mundo?",
-      "correct_answer": "Nilo",
+      "category": "history",
+      "question": "¿En qué año se firmó el Acta de la Declaración de Independencia de Venezuela?",
+      "correct_answer": "1811",
+      "incorrect_answers": [
+        "1810",
+        "1821",
+        "1830"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué importante batalla librada en 1821 consolidó la independencia de Venezuela?",
+      "correct_answer": "Batalla de Carabobo",
+      "incorrect_answers": [
+        "Batalla de Boyacá",
+        "Batalla de Pichincha",
+        "Batalla de Ayacucho"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿En qué estado venezolano se ubica el Parque Nacional Canaima?",
+      "correct_answer": "Bolívar",
       "incorrect_answers": [
         "Amazonas",
-        "Yangtsé",
-        "Misisipi"
+        "Delta Amacuro",
+        "Apure"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué tradición cultural venezolana fue declarada Patrimonio Cultural Inmaterial de la Humanidad por la UNESCO en 2012?",
+      "correct_answer": "Diablos Danzantes de Yare",
+      "incorrect_answers": [
+        "La Paradura del Niño",
+        "El Tamunangue",
+        "La Cruz de Mayo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿De qué ingrediente principal está hecha la Cachapa?",
+      "correct_answer": "Maíz tierno (choclo/jojoto)",
+      "incorrect_answers": [
+        "Plátano verde",
+        "Yuca rallada",
+        "Harina de trigo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué género musical navideño es originario del estado Zulia?",
+      "correct_answer": "Gaita zuliana",
+      "incorrect_answers": [
+        "Parranda",
+        "Aguinaldo",
+        "Galerón"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cuál es la segunda ciudad más poblada de Venezuela?",
+      "correct_answer": "Maracaibo",
+      "incorrect_answers": [
+        "Valencia",
+        "Barquisimeto",
+        "Maracay"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Quién fue el precursor de la Independencia que trajo la primera bandera a Venezuela en 1806?",
+      "correct_answer": "Francisco de Miranda",
+      "incorrect_answers": [
+        "Simón Rodríguez",
+        "Andrés Bello",
+        "José Félix Ribas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cómo se llaman las formaciones geológicas de mesetas con paredes verticales típicas del escudo guayanés venezolano?",
+      "correct_answer": "Tepuyes",
+      "incorrect_answers": [
+        "Farallones",
+        "Cuestas",
+        "Morros"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "sports",
+      "question": "¿Cómo se le conoce popularmente a la Selección de Fútbol de Venezuela?",
+      "correct_answer": "La Vinotinto",
+      "incorrect_answers": [
+        "La Tricolor",
+        "Los Cafeteros",
+        "La Albirroja"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama la arepa rellena de ensalada de gallina (o pollo), mayonesa y aguacate?",
+      "correct_answer": "Reina Pepiada",
+      "incorrect_answers": [
+        "La Pelúa",
+        "Sifrina",
+        "Catira"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "nature",
+      "question": "¿Cuál es la reserva de agua o embalse artificial más grande de Venezuela que abastece a la central hidroeléctrica del Guri?",
+      "correct_answer": "Embalse de Guri",
+      "incorrect_answers": [
+        "Embalse de Camatagua",
+        "Embalse del Guapo",
+        "Embalse de La Mariposa"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿A qué artista plástico venezolano se le conoce mundialmente por su trabajo en el Arte Cinético y sus obras en el Aeropuerto de Maiquetía?",
+      "correct_answer": "Carlos Cruz-Diez",
+      "incorrect_answers": [
+        "Jesús Soto",
+        "Armando Reverón",
+        "Alejandro Otero"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Qué cordillera atraviesa la región occidental de Venezuela dando origen a sus estados andinos?",
+      "correct_answer": "Cordillera de los Andes",
+      "incorrect_answers": [
+        "Cordillera de la Costa",
+        "Sierra de Perijá",
+        "Macizo Guayanés"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "sports",
+      "question": "¿Quién fue el primer beisbolista venezolano en ingresar al Salón de la Fama de Cooperstown?",
+      "correct_answer": "Luis Aparicio",
+      "incorrect_answers": [
+        "Miguel Cabrera",
+        "Omar Vizquel",
+        "Andrés Galarraga"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué evento histórico tuvo lugar el 19 de abril de 1810 en Caracas?",
+      "correct_answer": "El primer paso hacia la independencia (Proclamación)",
+      "incorrect_answers": [
+        "La Batalla de Boyacá",
+        "La muerte de Simón Bolívar",
+        "La creación de la Gran Colombia"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué ciudad venezolana es conocida como la 'Capital Musical de Venezuela'?",
+      "correct_answer": "Barquisimeto",
+      "incorrect_answers": [
+        "Mérida",
+        "Maracay",
+        "San Cristóbal"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cuál de estos estados no tiene costa hacia el Mar Caribe?",
+      "correct_answer": "Lara",
+      "incorrect_answers": [
+        "Carabobo",
+        "Aragua",
+        "Sucre"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año se fundó la ciudad de Santiago de León de Caracas?",
+      "correct_answer": "1567",
+      "incorrect_answers": [
+        "1498",
+        "1527",
+        "1610"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Quién fue el fundador de Caracas?",
+      "correct_answer": "Diego de Losada",
+      "incorrect_answers": [
+        "Alonso de Ojeda",
+        "Gonzalo Cumpido",
+        "Juan de Villegas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Quién escribió la célebre novela venezolana 'Doña Bárbara' publicada en 1929?",
+      "correct_answer": "Rómulo Gallegos",
+      "incorrect_answers": [
+        "Arturo Uslar Pietri",
+        "Andrés Eloy Blanco",
+        "Miguel Otero Silva"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es el parque nacional más grande de Venezuela por superficie territorial?",
+      "correct_answer": "Parque Nacional El Caura",
+      "incorrect_answers": [
+        "Parque Nacional Canaima",
+        "Parque Nacional Henri Pittier",
+        "Parque Nacional Parima-Tapirapecó"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "science",
+      "question": "¿Qué científico venezolano creó la vacuna contra la lepra y fue nominado al Premio Nobel?",
+      "correct_answer": "Jacinto Convit",
+      "incorrect_answers": [
+        "Humberto Fernández-Morán",
+        "Marcel Roche",
+        "Baruj Benacerraf"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "science",
+      "question": "¿Qué médico y científico venezolano inventó el bisturí de diamante?",
+      "correct_answer": "Humberto Fernández-Morán",
+      "incorrect_answers": [
+        "Jacinto Convit",
+        "José Gregorio Hernández",
+        "Tobías Lasser"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Cómo se llamó la primera constitución de Venezuela y de Hispanoamérica, promulgada en 1811?",
+      "correct_answer": "Constitución Federal de los Estados de Venezuela",
+      "incorrect_answers": [
+        "Constitución de Cúcuta",
+        "Constitución de Angostura",
+        "Carta de Jamaica"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿Qué importante pozo petrolero, reventado en 1914, inició la era de la producción petrolera comercial en Venezuela?",
+      "correct_answer": "Zumaque I",
+      "incorrect_answers": [
+        "Barroso II",
+        "Mene Grande 1",
+        "Tia Juana 100"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año ocurrió el histórico evento sísmico conocido como el 'Terremoto de Caracas' del siglo XX?",
+      "correct_answer": "1967",
+      "incorrect_answers": [
+        "1958",
+        "1973",
+        "1982"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál fue el primer Parque Nacional decretado en Venezuela (en 1937)?",
+      "correct_answer": "Parque Nacional Henri Pittier",
+      "incorrect_answers": [
+        "Parque Nacional El Ávila",
+        "Parque Nacional Sierra Nevada",
+        "Parque Nacional Mochima"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué poeta venezolano escribió el célebre poema 'Píntame angelitos negros'?",
+      "correct_answer": "Andrés Eloy Blanco",
+      "incorrect_answers": [
+        "Rafael Cadenas",
+        "Eugenio Montejo",
+        "Vicente Gerbasi"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Qué cueva ubicada en el estado Monagas es famosa por albergar a la ave nocturna llamada Guácharo?",
+      "correct_answer": "Cueva del Guácharo",
+      "incorrect_answers": [
+        "Cueva de Alfredo Jahn",
+        "Cueva El Samán",
+        "Cueva de la Quebrada del Toro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿En qué ciudad venezolana se celebra tradicionalmente el 'Tamunangue' o Danza de los Garrotes?",
+      "correct_answer": "El Tocuyo",
+      "incorrect_answers": [
+        "Choroni",
+        "San Lorenzo",
+        "Calabozo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué tratado internacional firmado en 1899 fijó la frontera oriental de Venezuela con la Guayana Británica y es rechazado por Venezuela?",
+      "correct_answer": "Laudo Arbitral de París",
+      "incorrect_answers": [
+        "Acuerdo de Ginebra",
+        "Tratado de Cúcuta",
+        "Tratado Michelena-Pombo"
       ]
     },
     {
       "type": "multiple",
       "difficulty": "easy",
-      "category": "general",
-      "question": "¿Qué lenguaje se habla en Brasil?",
-      "correct_answer": "Portugués",
+      "category": "gastronomy",
+      "question": "¿De qué está rellena tradicionalmente la arepa conocida como 'Pelúa'?",
+      "correct_answer": "Carne desmechada y queso amarillo",
       "incorrect_answers": [
-        "Español",
-        "Inglés",
-        "Francés"
+        "Pollo desmechado y queso blanco",
+        "Caraotas negras y queso blanco",
+        "Cazón y tajadas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es el famoso cerro o parque nacional que separa a Caracas del Mar Caribe?",
+      "correct_answer": "El Ávila (Waraira Repano)",
+      "incorrect_answers": [
+        "Cerro El Volcán",
+        "Cerro San Cristóbal",
+        "Sierra Nevada"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cuál es la bebida dulce tradicional venezolana hecha a base de arroz, leche y canela?",
+      "correct_answer": "Chicha de arroz",
+      "incorrect_answers": [
+        "Papelón con limón",
+        "Tizana",
+        "Carato de acapro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿En qué estado venezolano se encuentra el Archipiélago de Los Roques?",
+      "correct_answer": "Dependencias Federales",
+      "incorrect_answers": [
+        "Nueva Esparta",
+        "Sucre",
+        "Falcón"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama la bebida fría preparada con papelón y zumo de limón?",
+      "correct_answer": "Papelón con limón",
+      "incorrect_answers": [
+        "Guarapita",
+        "Chicha andina",
+        "Cocuy"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué tipo de carne se utiliza principalmente para preparar el famoso 'Asado Negro'?",
+      "correct_answer": "Muchacho redondo",
+      "incorrect_answers": [
+        "Lomo de cerdo",
+        "Falda de res",
+        "Pechuga de pavo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama la mezcla frutal refrescante mezclada con jugo o refresco muy popular en fiestas venezolanas?",
+      "correct_answer": "Tizana",
+      "incorrect_answers": [
+        "Guarapita",
+        "Sangría",
+        "Carato"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿En qué estado se encuentra la ciudad colonial de Santa Ana de Coro?",
+      "correct_answer": "Falcón",
+      "incorrect_answers": [
+        "Zulia",
+        "Yaracuy",
+        "Lara"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "sports",
+      "question": "¿Cuál es el deporte tradicional venezolano donde los competidores derriban toros sujetándolos por la cola?",
+      "correct_answer": "Coleo",
+      "incorrect_answers": [
+        "Bolas criollas",
+        "Garrote larense",
+        "Rodeo andino"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se le llama en Venezuela a las plátanos maduros fritos en lonjas?",
+      "correct_answer": "Tajadas",
+      "incorrect_answers": [
+        "Tostones",
+        "Patacones",
+        "Tostadas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el roedor más grande del mundo que habita abundantemente en los Llanos venezolanos?",
+      "correct_answer": "Chigüire (Capibara)",
+      "incorrect_answers": [
+        "Lapa",
+        "Picure",
+        "Baqueiro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Qué importante puente atraviesa el Lago de Maracaibo?",
+      "correct_answer": "Puente General Rafael Urdaneta",
+      "incorrect_answers": [
+        "Puente Angostura",
+        "Puente Mercosur",
+        "Puente Orinoquia"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cuál es el juego de mesa con bolas de colores pesado y cancha de tierra muy popular en reuniones familiares venezolanas?",
+      "correct_answer": "Bolas criollas",
+      "incorrect_answers": [
+        "Petanca",
+        "Bochas",
+        "Tejo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿De qué ciudad o región es originaria la arepa 'Cabimera'?",
+      "correct_answer": "Cabimas (Estado Zulia)",
+      "incorrect_answers": [
+        "Caracas",
+        "Barquisimeto",
+        "Mérida"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Qué estado de Venezuela es famoso por sus paisajes andinos y su teleférico de alta montaña?",
+      "correct_answer": "Mérida",
+      "incorrect_answers": [
+        "Trujillo",
+        "Táchira",
+        "Lara"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué fruto se utiliza tradicionalmente para elaborar el dulce de lechosa en Navidad?",
+      "correct_answer": "Papaya verde (Lechosa)",
+      "incorrect_answers": [
+        "Mango maduro",
+        "Guayaba",
+        "Piña"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Qué juguete tradicional venezolano consiste en una esfera de madera con un hueco atravesado por un cordel unido a un palo?",
+      "correct_answer": "Perinola",
+      "incorrect_answers": [
+        "Gurrufío",
+        "Yo-yo",
+        "Trompo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cuál es el nombre del teleférico más largo y alto del mundo ubicado en Venezuela?",
+      "correct_answer": "Mukumbarí",
+      "incorrect_answers": [
+        "Warairarepano",
+        "Teleférico del Ávila",
+        "Metrocable"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿En qué estado se libró la Batalla de Carabobo?",
+      "correct_answer": "Carabobo",
+      "incorrect_answers": [
+        "Aragua",
+        "Cojedes",
+        "Yaracuy"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "myths",
+      "question": "¿Qué personaje legendario del folclore venezolano vaga castigado por los llanos llevando un saco de huesos?",
+      "correct_answer": "El Silbón",
+      "incorrect_answers": [
+        "La Sayona",
+        "El Culebrón",
+        "Florentino"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Qué licor artesanal elaborado a base del agave de cocuy es autóctono de los estados Lara y Falcón?",
+      "correct_answer": "Cocuy",
+      "incorrect_answers": [
+        "Mezcal",
+        "Aguardiente de caña",
+        "Miche andino"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "sports",
+      "question": "¿En qué disciplina atlética la venezolana Yulimar Rojas estableció un récord mundial y ganó oro olímpico?",
+      "correct_answer": "Triple salto",
+      "incorrect_answers": [
+        "Salto de longitud",
+        "100 metros planos",
+        "Salto alto"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "myths",
+      "question": "¿Qué leyenda venezolana trata sobre una figura femenina espeluznante que castiga a los hombres infieles?",
+      "correct_answer": "La Sayona",
+      "incorrect_answers": [
+        "La Llorona",
+        "La Loca Luz Caraballo",
+        "La Dama Antañona"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Quién compuso la letra del himno nacional de Venezuela 'Gloria al Bravo Pueblo'?",
+      "correct_answer": "Vicente Salias",
+      "incorrect_answers": [
+        "Juan José Landaeta",
+        "Andrés Eloy Blanco",
+        "Rafael Urdaneta"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Quién compuso la música del himno nacional de Venezuela 'Gloria al Bravo Pueblo'?",
+      "correct_answer": "Juan José Landaeta",
+      "incorrect_answers": [
+        "Vicente Salias",
+        "José Ángel Lamas",
+        "Teresa Carreño"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "music",
+      "question": "¿Quién fue el afamado cantautor venezolano autor del tema 'Caballo Viejo'?",
+      "correct_answer": "Simón Díaz",
+      "incorrect_answers": [
+        "Gualberto Ibarreto",
+        "Ali Primera",
+        "Reinaldo Armas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Qué tepuy es famoso por tener en su cumbre el punto de frontera tripartito entre Venezuela, Brasil y Guyana?",
+      "correct_answer": "Roraima",
+      "incorrect_answers": [
+        "Auyantepui",
+        "Kukenán",
+        "Autana"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Qué plato andino venezolano consiste en una sopa a base de leche, cilantro, huevos y papas?",
+      "correct_answer": "Pizca andina",
+      "incorrect_answers": [
+        "Sancocho de gallina",
+        "Mundongo",
+        "Chupín de pescado"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿En qué estado venezolano se ubica el famoso fenómeno geográfico de la Cueva del Guácharo?",
+      "correct_answer": "Monagas",
+      "incorrect_answers": [
+        "Sucre",
+        "Anzoátegui",
+        "Bolívar"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "nature",
+      "question": "¿Cuál de las siguientes es una especie de delfín rosado de agua dulce que habita en el río Orinoco?",
+      "correct_answer": "Tonina",
+      "incorrect_answers": [
+        "Manatí",
+        "Boto",
+        "Tursiops"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿En qué consiste el juguete tradicional conocido como 'Gurrufío'?",
+      "correct_answer": "Tapas metálicas aplanadas atravesadas por pabilo que giran al halar",
+      "incorrect_answers": [
+        "Una marioneta de madera",
+        "Un trompo con punta de metal",
+        "Un cometa de papel de seda"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el pan dulce en forma de rosca o rollo sazonado con papelón y queso muy popular en Venezuela?",
+      "correct_answer": "Golfeado",
+      "incorrect_answers": [
+        "Tunja",
+        "Acemas",
+        "Pan de piquito"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué prócer venezolano fue el primer presidente de la Gran Colombia y estratega clave en la emancipación sudamericana?",
+      "correct_answer": "Simón Bolívar",
+      "incorrect_answers": [
+        "Francisco de Miranda",
+        "Antonio José de Sucre",
+        "José Antonio Páez"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Qué lago ubicado en la región occidental de Venezuela es considerado uno de los más antiguos del planeta?",
+      "correct_answer": "Lago de Maracaibo",
+      "incorrect_answers": [
+        "Lago de Valencia",
+        "Laguna de Tacarigua",
+        "Laguna de Mucubají"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿En qué histórico lugar pronunció Simón Bolívar su célebre 'Discurso de Angostura' en 1819?",
+      "correct_answer": "Ciudad Bolívar (antes Angostura)",
+      "incorrect_answers": [
+        "Caracas",
+        "Maracaibo",
+        "Puerto Cabello"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Cómo se llama la canción folclórica considerada por muchos como el segundo himno nacional de Venezuela?",
+      "correct_answer": "Alma Llanera",
+      "incorrect_answers": [
+        "Caballo Viejo",
+        "Venezuela",
+        "Molienda de Café"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Cómo se llamó el conflicto bélico civil que azotó a Venezuela entre 1859 y 1863?",
+      "correct_answer": "Guerra Federal",
+      "incorrect_answers": [
+        "Guerra de los Cinco Años",
+        "Revolución Azul",
+        "Revolución Restauradora"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Quién fue el líder militar federalista conocido como el 'General del Pueblo Soberano' durante la Guerra Federal?",
+      "correct_answer": "Ezequiel Zamora",
+      "incorrect_answers": [
+        "Juan Crisóstomo Falcón",
+        "José Antonio Páez",
+        "José Tadeo Monagas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué obra poética del escritor venezolano Andrés Eloy Blanco es un famoso romance lírico andino?",
+      "correct_answer": "La Loca Luz Caraballo",
+      "incorrect_answers": [
+        "Píntame Angelitos Negros",
+        "Canto a España",
+        "La Hilandería"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "music",
+      "question": "¿Qué pianista y compositora venezolana del siglo XIX fue llamada 'La Teresa de las Teclas' y tocó para Abraham Lincoln?",
+      "correct_answer": "Teresa Carreño",
+      "incorrect_answers": [
+        "Modesta Bor",
+        "Inocente Carreño",
+        "Luisa Cáceres"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "gastronomy",
+      "question": "¿De qué ingrediente se elabora la 'Naiboa', un dulce tradicional de la región central y oriental de Venezuela?",
+      "correct_answer": "Casabe con papelón y queso",
+      "incorrect_answers": [
+        "Harina de maíz con coco",
+        "Plátano verde con azúcar",
+        "Yuca dulce frita"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es la sima o socavón natural más profundo del mundo ubicado en el tepuy Sarisariñama?",
+      "correct_answer": "Sima Humboldt",
+      "incorrect_answers": [
+        "Sima Martel",
+        "Cueva del Guácharo",
+        "Abismo del Autana"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué combate naval de 1823 se selló definitivamente la evacuación de las tropas españolas del territorio venezolano?",
+      "correct_answer": "Batalla Naval del Lago de Maracaibo",
+      "incorrect_answers": [
+        "Batalla de Puerto Cabello",
+        "Combate de Los Frailes",
+        "Batalla de Chichiriviche"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿Qué etnia indígena habita principalmente la región del Delta del Orinoco y es famosa por sus artesanías en fibra de moriche?",
+      "correct_answer": "Warao",
+      "incorrect_answers": [
+        "Wayúu",
+        "Yanomami",
+        "Pemon"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año se inauguró el Planetario Humboldt ubicado en el Parque del Este en Caracas?",
+      "correct_answer": "1961",
+      "incorrect_answers": [
+        "1953",
+        "1970",
+        "1948"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué célebre escritor y político venezolano fue autor de 'Las Lanzas Coloradas' (1931)?",
+      "correct_answer": "Arturo Uslar Pietri",
+      "incorrect_answers": [
+        "Rómulo Gallegos",
+        "Rufino Blanco Fombona",
+        "Mariano Picón Salas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "science",
+      "question": "¿En qué estado venezolano se ubica el Observatorio Astronómico Nacional de Llano del Hato?",
+      "correct_answer": "Mérida",
+      "incorrect_answers": [
+        "Táchira",
+        "Trujillo",
+        "Lara"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué heroína de la independencia venezolana resistió el cautiverio en el Castillo de Santa Rosa en la Isla de Margarita?",
+      "correct_answer": "Luisa Cáceres de Arismendi",
+      "incorrect_answers": [
+        "Josefa Camejo",
+        "Manuela Sáenz",
+        "Juana La Avanzadora"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es la altitud aproximada del Pico Bolívar, la montaña más alta de Venezuela?",
+      "correct_answer": "4.978 metros sobre el nivel del mar",
+      "incorrect_answers": [
+        "5.200 metros sobre el nivel del mar",
+        "4.500 metros sobre el nivel del mar",
+        "4.210 metros sobre el nivel del mar"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué presidente venezolano ordenó la construcción de la autopista Caracas-La Guaira y las Torres del Silencio en la década de 1950?",
+      "correct_answer": "Marcos Pérez Jiménez",
+      "incorrect_answers": [
+        "Rómulo Betancourt",
+        "Isaías Medina Angarita",
+        "Eleazar López Contreras"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿De qué está rellena típicamente la arepa conocida como 'Sifrina'?",
+      "correct_answer": "Reina pepiada con queso amarillo rallado",
+      "incorrect_answers": [
+        "Carne desmechada y aguacate",
+        "Jamón y queso blanco",
+        "Cazón con plátano"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Qué estado de Venezuela es famoso por la producción de cocuy y por albergar las ruinas de Pueblo de Píritu?",
+      "correct_answer": "Falcón",
+      "incorrect_answers": [
+        "Lara",
+        "Portuguesa",
+        "Cojedes"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama el instrumento de percusión hecho con una mata seca rellena de semillas, típico del joropo?",
+      "correct_answer": "Maracas",
+      "incorrect_answers": [
+        "Güiro",
+        "Tambora",
+        "Charrasca"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se le llama comúnmente a la empanada de maíz rellena de cazón en las costas venezolanas?",
+      "correct_answer": "Empanada de cazón",
+      "incorrect_answers": [
+        "Empanada de pabellón",
+        "Empanada dominó",
+        "Empanada de jamón"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es la flor silvestre de color morado que adorna los campos venezolanos en época de lluvias?",
+      "correct_answer": "Flor de mayo",
+      "incorrect_answers": [
+        "Cayena",
+        "Trinitaria",
+        "Bojote"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿En qué estado se encuentra el Parque Nacional Morrocoy, famoso por sus cayos e islotes coralinos?",
+      "correct_answer": "Falcón",
+      "incorrect_answers": [
+        "Carabobo",
+        "Aragua",
+        "Sucre"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "sports",
+      "question": "¿Qué deporte, traído por petroleros estadounidenses a principios del siglo XX, es una gran pasión en Venezuela?",
+      "correct_answer": "Béisbol",
+      "incorrect_answers": [
+        "Baloncesto",
+        "Fútbol",
+        "Boxeo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué tipo de queso fresco y salado es un icono de los desayunos venezolanos?",
+      "correct_answer": "Queso blanco llanero (o duro)",
+      "incorrect_answers": [
+        "Queso mozzarella",
+        "Queso gouda",
+        "Queso manchego"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Zulia?",
+      "correct_answer": "Maracaibo",
+      "incorrect_answers": [
+        "Cabimas",
+        "Ciudad Ojeda",
+        "Machiques"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama la fiesta tradicional de los pueblos andinos donde se celebra la búsqueda del Niño Jesús en enero?",
+      "correct_answer": "La Paradura del Niño",
+      "incorrect_answers": [
+        "La Quema de Judas",
+        "El Baño de San Juan",
+        "La Parranda de San Pedro"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿De qué ingredientes principales está hecha la masa de las hallacas?",
+      "correct_answer": "Harina de maíz con caldo y un toque de onoto",
+      "incorrect_answers": [
+        "Harina de trigo con mantequilla",
+        "Yuca rallada con coco",
+        "Plátano verde machacado"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Qué ciudad es la capital del estado Lara?",
+      "correct_answer": "Barquisimeto",
+      "incorrect_answers": [
+        "Carora",
+        "El Tocuyo",
+        "Quíbor"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el felino autóctono más grande de Venezuela que habita en zonas selváticas y llaneras?",
+      "correct_answer": "Jaguar",
+      "incorrect_answers": [
+        "Puma",
+        "Ocelote",
+        "Tigrillo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama la golosina tradicional venezolana de coco rallado con papelón envuelta en hojas de plátano secas?",
+      "correct_answer": "Majarete / Conserva de coco",
+      "incorrect_answers": [
+        "Suspiro",
+        "Quesillo",
+        "Bienmesabe"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Aragua?",
+      "correct_answer": "Maracay",
+      "incorrect_answers": [
+        "Turmero",
+        "La Victoria",
+        "Cagua"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se le llama popularmente al día de la Quema de Judas que se realiza en Semana Santa?",
+      "correct_answer": "La Quema de Judas",
+      "incorrect_answers": [
+        "El Entierro de la Sardina",
+        "La Danza de los Vasallos",
+        "El Velorio de Cruz"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué postre venezolano de textura cremosa se elabora con leche condensada, leche entera, huevos y caramelo?",
+      "correct_answer": "Quesillo",
+      "incorrect_answers": [
+        "Flan de vainilla",
+        "Tres leches",
+        "Arroz con leche"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué puerto venezolano fue escenario del histórico bloqueo naval de potencias europeas en 1902-1903?",
+      "correct_answer": "Puerto Cabello",
+      "incorrect_answers": [
+        "La Guaira",
+        "Maracaibo",
+        "Carúpano"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué manifestación cultural tradicional del estado Miranda se celebra cada 29 de junio con hombres vestidos de frac y pumpá?",
+      "correct_answer": "Parranda de San Pedro",
+      "incorrect_answers": [
+        "Diablos Danzantes de Yare",
+        "San Juan Bautista",
+        "Los Palmeras de Chacao"
+      ]
+    },
+    {
+      "type": "multiple",
+      "category": "culture",
+      "difficulty": "medium",
+      "question": "¿En qué ciudad de Venezuela se realiza cada 24 de junio el tradicional y multitudinario 'Baño de San Juan' con repique de tambores?",
+      "correct_answer": "Barlovento (Caucagua / Curiepe)",
+      "incorrect_answers": [
+        "Caracas",
+        "Maracaibo",
+        "Valencia"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cómo se llama la isla venezolana situada frente a las costas del estado Sucre que fue refugio de piratas y criadero de perlas?",
+      "correct_answer": "Isla de Coche (y Cubagua)",
+      "incorrect_answers": [
+        "La Blanquilla",
+        "Isla de Aves",
+        "Los Testigos"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "sports",
+      "question": "¿Qué jinete venezolano es considerado uno de los mejores de la historia del hipismo en Estados Unidos, con múltiples triunfos en el Kentucky Derby?",
+      "correct_answer": "Gustavo Ávila / Ramón Domínguez / Javier Castellano",
+      "incorrect_answers": [
+        "Juan Vicente Tovar",
+        "Emisael Jaramillo",
+        "Santos Domínguez"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el pan dulce alargado relleno con jamón ahumado, pasas y aceitunas típico de la Navidad venezolana?",
+      "correct_answer": "Pan de jamón",
+      "incorrect_answers": [
+        "Panettone",
+        "Pan dulce de pascua",
+        "Rollo navideño"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "music",
+      "question": "¿Qué famoso sistema de orquestas infantiles y juveniles fue fundado en Venezuela por José Antonio Abreu en 1975?",
+      "correct_answer": "El Sistema",
+      "incorrect_answers": [
+        "Orquesta Sinfónica Simón Bolívar",
+        "Fundación Musical de Caracas",
+        "Coral Nacional Juvenil"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Cuál fue el nombre de la coalición de países formada por Simón Bolívar que incluía a la actual Venezuela, Colombia, Ecuador y Panamá?",
+      "correct_answer": "La Gran Colombia",
+      "incorrect_answers": [
+        "República Bolivariana",
+        "Confederación Andina",
+        "Provincias Unidas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué tratado firmado en 1820 puso fin temporal a las hostilidades y estableció las 'Reglamentaciones de Guerra' entre la Gran Colombia y España?",
+      "correct_answer": "Tratado de Armisticio y Regularización de la Guerra",
+      "incorrect_answers": [
+        "Tratado de Trujillo",
+        "Tratado de Santa Ana",
+        "Capitulación de San Mateo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Qué estado venezolano limita al sur con Brasil y al este con la zona en reclamación del Esequibo?",
+      "correct_answer": "Bolívar",
+      "incorrect_answers": [
+        "Amazonas",
+        "Delta Amacuro",
+        "Apure"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿En qué fecha exacta se conmemora el Día de la Resistencia Indígena en Venezuela (anteriormente Día de la Raza)?",
+      "correct_answer": "12 de octubre",
+      "incorrect_answers": [
+        "5 de julio",
+        "19 de abril",
+        "24 de junio"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué célebre pintor venezolano es conocido por sus lienzos costumbristas del siglo XIX como 'El perezoso' y 'La esquina de Gradillas'?",
+      "correct_answer": "Arturo Michelena",
+      "incorrect_answers": [
+        "Martín Tovar y Tovar",
+        "Cristóbal Rojas",
+        "Armando Reverón"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué pintor venezolano es mundialmente famoso por sus obras de la 'época blanca' y su refugio en Macuto?",
+      "correct_answer": "Armando Reverón",
+      "incorrect_answers": [
+        "Carlos Cruz-Diez",
+        "Jesús Soto",
+        "Manuel Cabré"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿De qué región de Venezuela es originario el dulce tradicional llamado 'Aliado' o 'Papelón con harina'?",
+      "correct_answer": "Los Andes (Mérida, Táchira, Trujillo)",
+      "incorrect_answers": [
+        "Oriente",
+        "Occidente",
+        "Los Llanos"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "nature",
+      "question": "¿Cuál es la serpiente venenosa más grande y temida de las selvas venezolanas?",
+      "correct_answer": "Mapire Maipivare (o Cascabel / Mapanare / Cuaima)",
+      "incorrect_answers": [
+        "Anaconda verde",
+        "Boa constrictor",
+        "Falsa coral"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué líder militar venezolano asumió el poder tras el triunfo de la 'Revolución Liberal Restauradora' en 1899?",
+      "correct_answer": "Cipriano Castro",
+      "incorrect_answers": [
+        "Juan Vicente Gómez",
+        "Joaquín Crespo",
+        "Antonio Guzmán Blanco"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Cómo se llamó el famoso asalto al tren encabezo por guerrilleros venezolanos en 1963 para robar las armas de las tropas gubernamentales?",
+      "correct_answer": "El Tren del Encanto",
+      "incorrect_answers": [
+        "Asalto al Palacio",
+        "Operación Cantaura",
+        "El Carupanazo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué insurrección militar contra el gobierno de Rómulo Betancourt ocurrió en el estado Carabobo en 1962?",
+      "correct_answer": "El Carupanazo (o El Porteñazo)",
+      "incorrect_answers": [
+        "El Elorzacazo",
+        "El Barquinazo",
+        "El Ruinazo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año se firmó el famoso 'Pacto de Punto Fijo', acuerdo político de gobernabilidad democrática en Venezuela?",
+      "correct_answer": "1958",
+      "incorrect_answers": [
+        "1945",
+        "1961",
+        "1973"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "science",
+      "question": "¿Qué destacado investigador venezolano descubrió los mecanismos inmunitarios que permitieron el desarrollo de inmunología y trasplantes (Premio Nobel)?",
+      "correct_answer": "Baruj Benacerraf",
+      "incorrect_answers": [
+        "Jacinto Convit",
+        "Humberto Fernández-Morán",
+        "Marcel Roche"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué novela escrita por Miguel Otero Silva relata la trágica historia del pueblo petrolero de Mene Grande?",
+      "correct_answer": "Fiebre (o Oficina No. 1 / Cuando quiero llorar no lloro)",
+      "incorrect_answers": [
+        "Casas Muertas",
+        "La Trepadora",
+        "Ifigenia"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué escritora venezolana es autora de la célebre novela epistolar y feminista 'Ifigenia' (1924)?",
+      "correct_answer": "Teresa de la Parra",
+      "incorrect_answers": [
+        "Ana Teresa Torres",
+        "Adriana Graterol",
+        "Antonieta Madrid"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué importante figura eclesiástica venezolana nacida en Isnotú se encuentra en proceso de beatificación y es venerada popularmente como médico de los pobres?",
+      "correct_answer": "José Gregorio Hernández",
+      "incorrect_answers": [
+        "Monseñor Salvador Montes de Oca",
+        "Cardenal José Humberto Quintero",
+        "Padre Machado"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es el nombre del punto más septentrional (al norte) de todo el territorio venezolano, ubicado en el Mar Caribe?",
+      "correct_answer": "Isla de Aves",
+      "incorrect_answers": [
+        "Archipiélago Los Roques",
+        "La Orchila",
+        "Península de Paraguaná"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Quién fue el dictador que gobernó Venezuela durante 27 años, desde 1908 hasta su muerte en 1935?",
+      "correct_answer": "Juan Vicente Gómez",
+      "incorrect_answers": [
+        "Cipriano Castro",
+        "Marcos Pérez Jiménez",
+        "Antonio Guzmán Blanco"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Cómo se denominó al movimiento cívico-militar del 23 de enero de 1958 que derrocó la dictadura de Marcos Pérez Jiménez?",
+      "correct_answer": "La Junta Patriótica",
+      "incorrect_answers": [
+        "El Frente Nacional",
+        "La Unión Democrática",
+        "El Bloque de la Patria"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Qué cordillera montañosa delimita el norte de Venezuela y cobija a Caracas y a los principales valles costeros?",
+      "correct_answer": "Cordillera de la Costa",
+      "incorrect_answers": [
+        "Cordillera de los Andes",
+        "Sierra de Perijá",
+        "Macizo de Turimiquire"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿Qué institución cultural de Caracas, inaugurada en 1883, lleva el nombre del héroe epónimo de la independencia y alberga tesoros de arte e historia?",
+      "correct_answer": "Museo Bolivariano (o Palacio de las Academias / Teatro Municipal)",
+      "incorrect_answers": [
+        "Galería de Arte Nacional",
+        "Museo de Bellas Artes",
+        "Museo de Arte Contemporáneo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué presidente de Venezuela promulgó en 1943 la histórica 'Ley de Hidrocarburos' que estableció el principio del reparto fiscal '50/50'?",
+      "correct_answer": "Isaías Medina Angarita",
+      "incorrect_answers": [
+        "Eleazar López Contreras",
+        "Rómulo Betancourt",
+        "Medina Angarita"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué autor venezolano ganó el prestigioso Premio Cervantes de Literatura en el año 2012?",
+      "correct_answer": "Rafael Cadenas",
+      "incorrect_answers": [
+        "Arturo Uslar Pietri",
+        "Eugenio Montejo",
+        "Salvador Garmendia"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es la cuenca hidrográfica que abarca aproximadamente el 70-80% del territorio venezolano y desagua en el Océano Atlántico?",
+      "correct_answer": "Cuenca del Orinoco",
+      "incorrect_answers": [
+        "Cuenca del Lago de Maracaibo",
+        "Cuenca del Cuyuní",
+        "Cuenca del Neverí"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "nature",
+      "question": "¿Qué parque nacional venezolano protege el macizo montañoso de Turimiquire, importante fuente hídrica del oriente del país?",
+      "correct_answer": "Parque Nacional Guácharos / Macizo de Turimiquire (Parque Nacional Turimiquire)",
+      "incorrect_answers": [
+        "Parque Nacional Mochima",
+        "Parque Nacional Coporo",
+        "Parque Nacional Península de Paria"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año se aprobó la actual Constitución de la República Bolivariana de Venezuela?",
+      "correct_answer": "1999",
+      "incorrect_answers": [
+        "1961",
+        "1989",
+        "1992"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿De qué está rellena típicamente la arepa conocida como 'Pabellón'?",
+      "correct_answer": "Carne desmechada, caraotas negras y queso blanco (con tajadas)",
+      "incorrect_answers": [
+        "Pollo y aguacate",
+        "Jamón y queso amarillo",
+        "Cazón con mantequilla"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Cojedes?",
+      "correct_answer": "San Carlos",
+      "incorrect_answers": [
+        "Tinaquillo",
+        "El Baúl",
+        "Tinaco"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama el instrumento de percusión metálico en forma de tubo que se raspa con una varilla y acompaña la gaita zuliana?",
+      "correct_answer": "Charrasca",
+      "incorrect_answers": [
+        "Güira",
+        "Tambora",
+        "Furruco"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el plato de sopa espesa o hervido a base de gallina y verduras típicas de las reuniones familiares venezolanas?",
+      "correct_answer": "Sancocho de gallina",
+      "incorrect_answers": [
+        "Mondongo",
+        "Pisca andina",
+        "Sopa de res"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cómo se llama la hermosa ave de plumaje escarlata brillante que habita en las zonas costeras y lagunas de Venezuela?",
+      "correct_answer": "Flamenco rojo (o Corocoro rojo)",
+      "incorrect_answers": [
+        "Garza Real",
+        "Pato Guire",
+        "Gaviota"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Yaracuy?",
+      "correct_answer": "San Felipe",
+      "incorrect_answers": [
+        "Yaritagua",
+        "Chivacoa",
+        "Nirgua"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "sports",
+      "question": "¿Qué importante equipo de béisbol profesional venezolano tiene su sede en Caracas y comparte la rivalidad de los 'Leones'?",
+      "correct_answer": "Tiburones de La Guaira / Navegantes del Magallanes",
+      "incorrect_answers": [
+        "Águilas del Zulia",
+        "Cardenales de Lara",
+        "Caribes de Anzoátegui"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué bebida caliente típica de los Andes venezolanos lleva café, leche, papelón, especias y un toque de licor (como miche)?",
+      "correct_answer": "Café con miche / Consomé andino",
+      "incorrect_answers": [
+        "Chicha andina",
+        "Carato de maíz",
+        "Guarapo de papelón"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Delta Amacuro?",
+      "correct_answer": "Tucupita",
+      "incorrect_answers": [
+        "Pedernales",
+        "Curiapo",
+        "Muriapo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Cómo se llama el popular instrumento de fricción de gran tamaño usado en las gaitas para marcar los bajos?",
+      "correct_answer": "Furruco",
+      "incorrect_answers": [
+        "Tambora",
+        "Cuatro",
+        "Mandolina"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué dulce tradicional venezolano hecho de leche, azúcar y canela se compacta en forma de barras rectangulares?",
+      "correct_answer": "Dulce de leche (o arequipe)",
+      "incorrect_answers": [
+        "Conservas de coco",
+        "Majarete",
+        "Quesillo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Barinas?",
+      "correct_answer": "Barinas",
+      "incorrect_answers": [
+        "Barinitas",
+        "Sabaneta",
+        "Socopó"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "nature",
+      "question": "¿Cuál es el mono autóctono venezolano de pelaje negro rojizo que emite potentes aullidos en las selvas y parques del país?",
+      "correct_answer": "Mono Aullador (Araguato)",
+      "incorrect_answers": [
+        "Mono Capuchino",
+        "Mono Araña",
+        "Mono Saki"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el aperitivo frito hecho de yuca cocida y machacada en forma de cilindro con queso?",
+      "correct_answer": "Yuca frita / Caribañola (o Bolitas de yuca)",
+      "incorrect_answers": [
+        "Tequeño de yuca",
+        "Empanada de yuca",
+        "Arepa de yuca"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Apure?",
+      "correct_answer": "San Fernando de Apure",
+      "incorrect_answers": [
+        "Achaguas",
+        "Elorza",
+        "Guasdualito"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "culture",
+      "question": "¿Qué tradición llanera consiste en un contrapunteo cantado y rimado entre dos copleros al ritmo del arpa, cuatro y maracas?",
+      "correct_answer": "Contrapunteo llanero",
+      "incorrect_answers": [
+        "Galerón",
+        "Parranda",
+        "Seis por derecho"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "easy",
+      "category": "gastronomy",
+      "question": "¿Qué bebida fermentada de maíz, piña y especias es típica de la gastronomía andina venezolana?",
+      "correct_answer": "Chicha andina",
+      "incorrect_answers": [
+        "Carato de arroz",
+        "Guarapo de caña",
+        "Miche andino"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué nombre recibió el gran plan de industrialización y sustitución de importaciones impulsado por la Corporación Venezolana de Guayana (CVG) a mediados del siglo XX?",
+      "correct_answer": "La creación de Ciudad Guayana y la Siderúrgica del Orinoco (Sidor)",
+      "incorrect_answers": [
+        "Plan de los Puertos",
+        "Polo petrolero del sur",
+        "Operación Guayana"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Quién fue el destacado militar y político liberal que gobernó Venezuela durante el período conocido como el 'Septenio' (1870-1877)?",
+      "correct_answer": "Antonio Guzmán Blanco",
+      "incorrect_answers": [
+        "Joaquín Crespo",
+        "Crespo Morales",
+        "Juan Vicente Gómez"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué templo monumental de Caracas es el lugar donde reposan los restos mortales de Simón Bolívar (Panteón Nacional)?",
+      "correct_answer": "Panteón Nacional de Venezuela",
+      "incorrect_answers": [
+        "Catedral de Caracas",
+        "Iglesia de San Francisco",
+        "Basílica de Santa Teresa"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cómo se llama el gran embalse y complejo hidroeléctrico ubicado en el estado Bolívar sobre el río Caroní?",
+      "correct_answer": "Central Hidroeléctrica Simón Bolívar (Represa de Guri)",
+      "incorrect_answers": [
+        "Represa de Macagua",
+        "Represa de Caruachi",
+        "Represa de Uribante Caparo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "sports",
+      "question": "¿Qué basquetbolista venezolano logró llegar y brillar en la NBA, siendo campeón con los San Antonio Spurs en 2014?",
+      "correct_answer": "Greivis Vásquez",
+      "incorrect_answers": [
+        "Oscar Torres",
+        "Carl Herrera",
+        "David Cubillán"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿Cómo se llama el postre criollo elaborado con capas de bizcocho emborrachado en licor, crema pastelera y merengue?",
+      "correct_answer": "Bienmesabe",
+      "incorrect_answers": [
+        "Tres leches",
+        "Torta de piña",
+        "Quesillo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "music",
+      "question": "¿Qué compositor venezolano es el autor de la célebre obra sinfónica 'Margarita' y del vals 'Fugitivo'?",
+      "correct_answer": "Inocente Carreño",
+      "incorrect_answers": [
+        "Vicente Emilio Sojo",
+        "Antonio Estévez",
+        "Federico Ruiz"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué tratado internacional limítrofe marítimo firmaron Venezuela y los Países Bajos (respecto a las Antillas Neerlandesas) en 1978?",
+      "correct_answer": "Tratado de Delimitación de Fronteras Marítimas Venezuela-Antillas Neerlandesas",
+      "incorrect_answers": [
+        "Tratado Michelena-Pombo",
+        "Tratado de Cartagena",
+        "Acuerdo de San José"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué presidente provisional convocó a la Asamblea Constituyente que redactó la Constitución de 1961 en Venezuela?",
+      "correct_answer": "Rómulo Betancourt (bajo la Junta de Gobierno transitoria presidida por Edgar Sanabria promulgó la de 1961)",
+      "incorrect_answers": [
+        "Wolfgang Larrazábal",
+        "Marcos Pérez Jiménez",
+        "Isaías Medina Angarita"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Qué ciudad es la capital del estado Trujillo y se encuentra en la zona andina?",
+      "correct_answer": "Trujillo",
+      "incorrect_answers": [
+        "Valera",
+        "Boconó",
+        "Carache"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Qué famosa estructura monumental de hormigón erigida en Trujillo mide más de 46 metros de altura y rinde tributo a la Virgen de la Paz?",
+      "correct_answer": "Monumento a la Virgen de la Paz",
+      "incorrect_answers": [
+        "Monumento a la Chinita",
+        "Monumento a José Gregorio Hernández",
+        "Monumento a Baralt"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "geography",
+      "question": "¿Cuál es la capital del estado Miranda?",
+      "correct_answer": "Los Teques",
+      "incorrect_answers": [
+        "Petare",
+        "Guatire",
+        "Baruta"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "nature",
+      "question": "¿Cuál es el árbol frondoso de ramas extendidas muy común en plazas y sabanas venezolanas que inspiró canciones populares?",
+      "correct_answer": "Samán",
+      "incorrect_answers": [
+        "Araguaney",
+        "Apamate",
+        "Cují"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "culture",
+      "question": "¿Cómo se llama la emblemática plaza circular de Caracas rodeada de torres financieras donde convergen importantes avenidas como la Libertador y Francisco de Miranda?",
+      "correct_answer": "Plaza Venezuela",
+      "incorrect_answers": [
+        "Plaza Altamira",
+        "Plaza Bolívar",
+        "Plaza O'Leary"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "gastronomy",
+      "question": "¿De qué ingrediente principal se elaboran los tradicionales 'Buñuelos de yuca' cubiertos con melaza de papelón?",
+      "correct_answer": "Yuca cocida y amasada",
+      "incorrect_answers": [
+        "Plátano maduro",
+        "Harina de trigo",
+        "Apio rallado"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "history",
+      "question": "¿Qué destacado historiador y escritor venezolano fundó la Academia Nacional de la Historia y escribió 'Historia contemporánea de Venezuela'?",
+      "correct_answer": "José Gil Fortoul",
+      "incorrect_answers": [
+        "Vicente Lecuna",
+        "Laureano Vallenilla Lanz",
+        "Mario Briceño Iragorry"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué insurrección cívico-militar estalló en noviembre de 1992 contra el gobierno de Carlos Andrés Pérez, constituyendo el segundo intento de golpe de estado de ese año?",
+      "correct_answer": "Alzamiento del 27 de noviembre de 1992",
+      "incorrect_answers": [
+        "El Carupanazo",
+        "El Porteñazo",
+        "Operación Grito de Patria"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué importante acuerdo petrolero internacional promovido por Venezuela en el año 2000 suministró petróleo en condiciones preferenciales a países de Centroamérica y el Caribe?",
+      "correct_answer": "Acuerdo Energético de Caracas (Acuerdo de San José / Petrocaribe)",
+      "incorrect_answers": [
+        "OPEP",
+        "Pacto de la Guaira",
+        "Alianza Petrolera del Sur"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿En qué año se fundó formalmente la Organización de Países Exportadores de Petróleo (OPEP) en Bagdad, de la cual Venezuela fue miembro fundador por iniciativa de Juan Pablo Pérez Alfonzo?",
+      "correct_answer": "1960",
+      "incorrect_answers": [
+        "1955",
+        "1973",
+        "1965"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "science",
+      "question": "¿Qué reconocido médico y científico venezolano fundó el Instituto Venezolano de Investigaciones Científicas (IVIC), nombre original (Instituto Venezolano de Neurología e Investigaciones)?",
+      "correct_answer": "Humberto Fernández-Morán",
+      "incorrect_answers": [
+        "Marcel Roche",
+        "José María Vargas",
+        "Jacinto Convit"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué obra ensayística del pensador venezolano Laureano Vallenilla Lanz, publicada en 1919, analiza el caudillismo y la sociología política del país?",
+      "correct_answer": "Cesarismo democrático",
+      "incorrect_answers": [
+        "Investigaciones sobre la moneda",
+        "Gente de Venezolana",
+        "Mensaje sin destino"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué autor venezolano escribió el célebre ensayo crítico 'Mensaje sin destino' (1951)?",
+      "correct_answer": "Mario Briceño Iragorry",
+      "incorrect_answers": [
+        "Arturo Uslar Pietri",
+        "Mariano Picón Salas",
+        "Rómulo Gallegos"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué presidente venezolano nacionalizó la industria del hierro en 1975 y la industria petrolera en 1976?",
+      "correct_answer": "Carlos Andrés Pérez (en su primer mandato)",
+      "incorrect_answers": [
+        "Rafael Caldera",
+        "Luis Herrera Campins",
+        "Jaime Lusinchi"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Cuál es el nombre del punto más occidental de Venezuela, situado en la península homónima en la frontera con Colombia?",
+      "correct_answer": "Península de La Guajira",
+      "incorrect_answers": [
+        "Península de Paraguaná",
+        "Península de Araya",
+        "Península de Paria"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿Qué célebre obra arquitectónica de la Universidad Central de Venezuela (UCV), diseñada por Carlos Raúl Villanueva, fue declarada Patrimonio de la Humanidad por la UNESCO?",
+      "correct_answer": "Ciudad Universitaria de Caracas",
+      "incorrect_answers": [
+        "El Helicoide",
+        "Las Torres del Silencio",
+        "El Poliedro de Caracas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué ministro de minas e hidrocarburos venezolano es considerado junto al saudí Abdullah Tariki los principales cofundadores intelectuales de la OPEP?",
+      "correct_answer": "Juan Pablo Pérez Alfonzo",
+      "incorrect_answers": [
+        "Manuel Pérez Guerrero",
+        "Alfonzo Rangel",
+        "Arturo Uslar Pietri"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "culture",
+      "question": "¿Qué sala multifuncional de espectáculos y eventos masivos de Caracas, con forma geodésica, fue inaugurada en 1974 al sur de la ciudad?",
+      "correct_answer": "Poliedro de Caracas",
+      "incorrect_answers": [
+        "Teatro Teresa Carreño",
+        "Nuevo Circo de Caracas",
+        "Parque Naciones Unidas"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Cómo se llamó el congreso constituyente convocado por Simón Bolívar en 1821 que consolidó formalmente la unión de la República de Colombia?",
+      "correct_answer": "Congreso de Cúcuta",
+      "incorrect_answers": [
+        "Congreso de Angostura",
+        "Congreso de Panamá",
+        "Congreso de Cariaco"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Qué parque nacional marino costero protege las aguas y arrecifes coralinos entre los estados Aragua y Carabobo?",
+      "correct_answer": "Parque Nacional San Esteban (y Parque Nacional Henri Pittier)",
+      "incorrect_answers": [
+        "Parque Nacional Mochima",
+        "Parque Nacional Médanos de Coro",
+        "Parque Nacional Ciénagas del Catatumbo"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué importante líder político y fundador de Acción Democrática asumió la presidencia de Venezuela tras el golpe de estado de 1945 (El Trienio Adeco)?",
+      "correct_answer": "Rómulo Betancourt",
+      "incorrect_answers": [
+        "Raúl Leoni",
+        "Gonzalo Barrios",
+        "Carlos Andrés Pérez"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "literature",
+      "question": "¿Qué ensayista e historiador venezolano es el autor de la célebre obra de interpretación histórica 'De la conquista a la independencia' (1944)?",
+      "correct_answer": "Mariano Picón Salas",
+      "incorrect_answers": [
+        "Augusto Mijares",
+        "Caracciolo Parra León",
+        "Vicente Lecuna"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "geography",
+      "question": "¿Qué río venezolano marca parte de la frontera natural oriental y sur con la Guayana Esequiba?",
+      "correct_answer": "Río Cuyuní",
+      "incorrect_answers": [
+        "Río Caroní",
+        "Río Orinoco",
+        "Río Ventuari"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "hard",
+      "category": "history",
+      "question": "¿Qué historiador y diplomático venezolano dedicó gran parte de su vida a recopilar los archivos y documentos oficiales del Libertador Simón Bolívar ('Cartas del Libertador')?",
+      "correct_answer": "Vicente Lecuna",
+      "incorrect_answers": [
+        "Humberto Tejera",
+        "Enrique Bernardo Núñez",
+        "Manuel Landaeta Rosales"
       ]
     }
   ]

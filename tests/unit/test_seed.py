@@ -217,7 +217,7 @@ def test_shipped_bank_loads_with_matching_correct_answers() -> None:
     raw_rows = json.loads(QUESTIONS_FILE.read_text(encoding="utf-8"))["results"]
     qs = load_questions_from_file(QUESTIONS_FILE)
 
-    assert len(qs) == 15
+    assert len(qs) > 1
     assert len(qs) == len(raw_rows)
     for q, row in zip(qs, raw_rows):
         assert _selected(q) == row["correct_answer"]

@@ -20,7 +20,8 @@ from sqlalchemy import Integer, cast, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..domain.question import DIFF_BASE, score as compute_score
+from ..domain.question import DIFF_BASE
+from ..domain.question import score as compute_score
 from ..domain.session import RoundStatus
 from ..domain.vote import OptionLetter, parse_vote
 from ..infra.avatar_cache import cache_avatar
@@ -155,6 +156,7 @@ async def open_round(
     rnd.closed_cursor = None
     rnd.tally_json = None
     rnd.correct_option = None
+    rnd.first_answer_at = None
     await session.commit()
     return rnd
 
@@ -163,7 +165,6 @@ async def ingest_event(
     session: AsyncSession,
     rnd: Round,
     comment,
-    opened_at: datetime | None = None,
 ) -> Answer | None:
     """Turn one live comment into a ballot, or ignore it.
 
@@ -193,8 +194,13 @@ async def ingest_event(
     if duplicate is not None:
         return None
 
-    base = opened_at or rnd.opened_at
-    elapsed_ms = int(max(0.0, (comment.ts_utc - _aware(base)).total_seconds() * 1000))
+    if rnd.first_answer_at is None:
+        rnd.first_answer_at = _to_naive_utc(comment.ts_utc)
+
+    base = _aware(rnd.first_answer_at)
+    elapsed_ms = int(
+        max(0.0, (comment.ts_utc - base).total_seconds() * 1000)
+    )
     limit_ms = rnd.question_time_limit_s * 1000
     elapsed_ms = min(elapsed_ms, limit_ms)
 

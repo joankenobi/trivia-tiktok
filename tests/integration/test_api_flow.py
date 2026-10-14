@@ -535,14 +535,37 @@ class TestShowPayload:
         ).json()
         assert show["autoplay"] is True
 
-    def test_deadline_is_sent_while_a_round_is_open(self, client):
+    def test_no_deadline_while_waiting_for_the_first_answer(self, client):
+        """A round with no first answer waits forever, so it has no deadline.
+
+        Both clients hide the countdown on a null deadline, which is exactly the
+        wanted behaviour: no clock is running until somebody answers.
+        """
         show = client.post("/api/v1/shows", json={"room_id": "1", "question_count": 1}).json()
         rnd = client.post(f"/api/v1/shows/{show['id']}/rounds").json()
 
+        assert rnd["status"] == "open"
+        assert rnd["deadline_epoch_ms"] is None
+
+        body = client.get(f"/api/v1/shows/{show['id']}").json()
+        cur = next(r for r in body["rounds"] if r["status"] == "open")
+        assert cur["deadline_epoch_ms"] is None
+
+    def test_deadline_is_sent_once_the_first_answer_lands(self, client):
+        show = client.post("/api/v1/shows", json={"room_id": "1", "question_count": 1}).json()
+        client.post(f"/api/v1/shows/{show['id']}/rounds")
+        client.upstream.add_comment(7001, "A", uid="alice")
+
+        # Ingestion is the poller's background job, so wait on the vote it counts
+        # rather than on the first read.
+        _wait_for_counts(client, show["id"])
+        body = client.get(f"/api/v1/shows/{show['id']}").json()
+        cur = next(r for r in body["rounds"] if r["status"] == "open")
+
         # The countdown is pure arithmetic for the client: it needs a deadline and
         # the server clock it was measured against, not a timestamp to parse.
-        assert rnd["deadline_epoch_ms"] is not None
-        assert rnd["deadline_epoch_ms"] > rnd["server_epoch_ms"]
+        assert cur["deadline_epoch_ms"] is not None
+        assert cur["deadline_epoch_ms"] > cur["server_epoch_ms"]
 
     def test_no_deadline_for_a_pending_round(self, client):
         show = client.post("/api/v1/shows", json={"room_id": "1", "question_count": 1}).json()

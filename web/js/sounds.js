@@ -1,66 +1,120 @@
-// Overlay push sounds.
+// Overlay sounds.
 //
-// The overlay plays one short sound at random every time an animation runs (the
-// first-correct toast and the ranking swap). The list is fetched once, each URL
-// gets its own preloaded `Audio`, and every failure is swallowed: a missing
-// sound must never break the render loop that keeps the stream alive.
+// The overlay plays one short sound at random for push animations, and a
+// waiting cue while a round waits for its first answer. Each folder has its
+// own endpoint, cached list, preloaded Audio map and a shared promise so early
+// callers do not race. Every failure is swallowed: missing sounds must never
+// break the render loop that keeps the stream alive.
 
-import { api, pickRandom } from "/js/common.js";
+import { api, pickRandom } from "./common.js";
 
-const ENDPOINT = "/api/v1/sounds/pushPlayer";
+// `api()` already prepends "/api/v1" (see common.js), so these must be the
+// paths WITHOUT that prefix. Passing the full "/api/v1/..." path here composed
+// "/api/v1/api/v1/..." and 404'd into the swallow-everything catch below.
+const PUSH_ENDPOINT = "/sounds/pushPlayer";
+const WAITING_ENDPOINT = "/sounds/waiting";
+const CORRECT_ENDPOINT = "/sounds/correct";
 
-// The promise is cached, not just the resolved list, so two early callers share
-// one request instead of racing. The array and the players are cached too, so a
-// later play does no work at all.
-let loadPromise = null;
-let soundUrls = [];
-const players = new Map();
+// Exported so a test can assert the paths stay prefix-free (the regression that
+// silenced every cue is invisible at runtime).
+export const SOUND_ENDPOINTS = {
+  push: PUSH_ENDPOINT,
+  waiting: WAITING_ENDPOINT,
+  correct: CORRECT_ENDPOINT,
+};
 
-async function loadPushSounds() {
-  try {
-    const data = await api(ENDPOINT);
-    soundUrls = Array.isArray(data?.sounds) ? data.sounds : [];
-  } catch {
-    soundUrls = []; // unreachable API is silent, not fatal
+function createSoundPlayer(endpoint) {
+  let loadPromise = null;
+  let soundUrls = [];
+  const players = new Map();
+  // The play() rejection repeats for every cue while the stream runs, so the
+  // warning is collapsed to one line per player instead of flooding the console.
+  let warnedPlayback = false;
+
+  async function load() {
+    try {
+      const data = await api(endpoint);
+      soundUrls = Array.isArray(data?.sounds) ? data.sounds : [];
+    } catch (error) {
+      // Still non-fatal: silence must never break the render loop. But silence
+      // with no trace is exactly how a wrong prefix muted the whole overlay, so
+      // the failure is reported once (the promise caches this call per player).
+      console.warn(`[sounds] could not list ${endpoint}:`, error);
+      soundUrls = [];
+    }
+    for (const url of soundUrls) {
+      if (players.has(url)) continue;
+      const audio = new Audio(url);
+      audio.preload = "auto";
+      players.set(url, audio);
+    }
+    return soundUrls;
   }
-  for (const url of soundUrls) {
-    if (players.has(url)) continue;
-    const audio = new Audio(url);
-    audio.preload = "auto";
-    players.set(url, audio);
+
+  function ensureLoaded() {
+    if (!loadPromise) loadPromise = load();
+    return loadPromise;
   }
-  return soundUrls;
+
+  function preload() {
+    ensureLoaded();
+  }
+
+  async function playRandom() {
+    const urls = await ensureLoaded();
+    const url = pickRandom(urls);
+    if (!url) return;
+    const audio = players.get(url);
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+    } catch {
+      /* benign: the clip is simply not seekable until it has loaded */
+    }
+    try {
+      const played = audio.play();
+      if (played && typeof played.catch === "function") {
+        played.catch((error) => {
+          if (warnedPlayback) return;
+          warnedPlayback = true;
+          console.warn(`[sounds] playback blocked for ${url}:`, error);
+        });
+      }
+    } catch (error) {
+      if (!warnedPlayback) {
+        warnedPlayback = true;
+        console.warn(`[sounds] playback failed for ${url}:`, error);
+      }
+    }
+  }
+
+  return { preload, playRandom };
 }
 
-function ensureLoaded() {
-  if (!loadPromise) loadPromise = loadPushSounds();
-  return loadPromise;
-}
+const pushPlayer = createSoundPlayer(PUSH_ENDPOINT);
+const waitingPlayer = createSoundPlayer(WAITING_ENDPOINT);
+const correctPlayer = createSoundPlayer(CORRECT_ENDPOINT);
 
-// Fire-and-forget warm-up for an early call at boot; the result is not awaited.
 export function preloadPushSounds() {
-  ensureLoaded();
+  pushPlayer.preload();
 }
 
 export async function playRandomPushSound() {
-  const urls = await ensureLoaded();
-  const url = pickRandom(urls);
-  if (!url) return;
-  const audio = players.get(url);
-  if (!audio) return;
-  try {
-    // Resetting is what allows the same clip to fire twice in a row; it can
-    // throw before the metadata is known, which is not a reason to skip play().
-    audio.currentTime = 0;
-  } catch {
-    /* ignore */
-  }
-  try {
-    // Autoplay policy rejects the returned promise on an unclicked document;
-    // the cue is best-effort, so the rejection is swallowed.
-    const played = audio.play();
-    if (played && typeof played.catch === "function") played.catch(() => {});
-  } catch {
-    /* ignore */
-  }
+  return pushPlayer.playRandom();
+}
+
+export function preloadWaitingSounds() {
+  waitingPlayer.preload();
+}
+
+export async function playRandomWaitingSound() {
+  return waitingPlayer.playRandom();
+}
+
+export function preloadCorrectSounds() {
+  correctPlayer.preload();
+}
+
+export async function playRandomCorrectSound() {
+  return correctPlayer.playRandom();
 }
