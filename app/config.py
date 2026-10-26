@@ -37,7 +37,11 @@ class Settings(BaseSettings):
     # TTS voice service. Each new question's text is posted here so it can be
     # read aloud. Defaults to the same host as the lives API.
     tts_api_base_url: str = "http://127.0.0.1:8081"
-    tts_api_timeout_s: float = 5.0
+    # The upstream /tts endpoint answers only once the text has finished playing,
+    # so the response latency IS the speech duration: a 5s budget timed out on
+    # every long question while the audio still played. Keep this comfortably
+    # above the longest spoken question.
+    tts_api_timeout_s: float = 30.0
 
     # Autoplay: how long a round accepts votes, and how long the answer stays on
     # screen before the next question opens. Both are part of the pacing the

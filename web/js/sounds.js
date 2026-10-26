@@ -60,6 +60,55 @@ function createSoundPlayer(endpoint) {
     ensureLoaded();
   }
 
+  function warnPlayback(url, error) {
+    if (warnedPlayback) return;
+    warnedPlayback = true;
+    console.warn(`[sounds] playback blocked for ${url}:`, error);
+  }
+
+  /**
+   * Play one clip at random and resolve when it has finished sounding.
+   *
+   * The overlay serializes its reveal cues on sound duration, so this promise
+   * IS the gate: the next cue waits on it. It must therefore never reject and
+   * never hang -- a rejected or stuck promise would wedge the whole chain.
+   * Resolve immediately when there is nothing to play or the browser blocks
+   * autoplay, and arm a fallback timer in case a clip never emits `ended`.
+   */
+  function playAndWait(audio, url) {
+    return new Promise((resolve) => {
+      let done = false;
+      let fallback = null;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        if (fallback !== null) clearTimeout(fallback);
+        audio.removeEventListener("ended", finish);
+        resolve();
+      };
+
+      audio.addEventListener("ended", finish, { once: true });
+      // Safety net: a clip that never fires `ended` (truncated, still loading,
+      // blocked) must not hold the cue channel open forever. A known duration
+      // is the honest upper bound; without one, cap the wait.
+      const waitMs = Number.isFinite(audio.duration) ? audio.duration * 1000 + 500 : 5000;
+      fallback = setTimeout(finish, waitMs);
+
+      try {
+        const played = audio.play();
+        if (played && typeof played.catch === "function") {
+          played.catch((error) => {
+            warnPlayback(url, error);
+            finish();
+          });
+        }
+      } catch (error) {
+        warnPlayback(url, error);
+        finish();
+      }
+    });
+  }
+
   async function playRandom() {
     const urls = await ensureLoaded();
     const url = pickRandom(urls);
@@ -71,21 +120,7 @@ function createSoundPlayer(endpoint) {
     } catch {
       /* benign: the clip is simply not seekable until it has loaded */
     }
-    try {
-      const played = audio.play();
-      if (played && typeof played.catch === "function") {
-        played.catch((error) => {
-          if (warnedPlayback) return;
-          warnedPlayback = true;
-          console.warn(`[sounds] playback blocked for ${url}:`, error);
-        });
-      }
-    } catch (error) {
-      if (!warnedPlayback) {
-        warnedPlayback = true;
-        console.warn(`[sounds] playback failed for ${url}:`, error);
-      }
-    }
+    return playAndWait(audio, url);
   }
 
   return { preload, playRandom };

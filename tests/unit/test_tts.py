@@ -32,7 +32,7 @@ class TestAnnounce:
 
         assert len(seen) == 1
         assert seen[0].method == "POST"
-        assert seen[0].url.path == "/api/v1/tts/model"
+        assert seen[0].url.path == "/api/v1/tts"
         assert seen[0].content == b'{"text":"Capital of France?"}'
 
     async def test_error_response_raises_for_the_caller(self):
@@ -51,3 +51,12 @@ class TestAnnounceSafely:
         monkeypatch.setattr("app.infra.tts._default_client", _client(handler))
         # Must return normally despite the dead service.
         await _announce_safely("still fine")
+
+
+class TestDefaultTimeout:
+    def test_default_timeout_outlasts_a_spoken_question(self):
+        """The upstream endpoint answers only after the text has finished
+        playing, so the response latency is the speech duration. A shorter
+        default times out on every long question while the audio still plays.
+        """
+        assert TTSClient().timeout_s >= 30.0

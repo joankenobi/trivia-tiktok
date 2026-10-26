@@ -189,23 +189,42 @@ export function isWaitingForFirstAnswer(round) {
 }
 
 /**
- * The gap before the correct-answer cue when a winner jingle is already playing.
+ * A single FIFO lane for the overlay's reveal cues.
  *
- * A reveal can announce a first-correct winner ("¡Primero en acertar!"), and
- * that toast owns the moment. The correct cue waits this long so the two never
- * start together. It is tunable: it is the only knob for that spacing.
- */
-export const CORRECT_CUE_DELAY_MS = 1500;
-
-/**
- * How long the correct-answer cue waits before it plays on a reveal.
+ * The reveal fires three cues back to back -- the toast's push sound, then the
+ * correct-answer sound, then the ranking swap's push sound. Fixed millisecond
+ * delays assumed each clip was shorter than the gap; a real clip is not, so the
+ * cues stacked and read as noise. Serializing them is the fix: a task runs only
+ * once the previous one has settled, so an animation can start at the exact
+ * moment its own sound starts and never while the previous sound still plays.
  *
- * Zero when nobody answered correctly: the answer is revealed regardless of the
- * toast, so the cue must fire right away. With a winner, `CORRECT_CUE_DELAY_MS`
- * keeps it from stacking on the jingle. Pure, so plain node can check both.
+ * A task that throws must not wedge the whole chain (one bad cue would otherwise
+ * silence every later reveal), so failures are swallowed for chaining while
+ * still rejecting the caller's own promise. Kept free of timers and DOM so plain
+ * node can test the ordering directly.
+ *
+ * @returns {{ busy: boolean, run: (task: () => unknown) => Promise<unknown> }}
  */
-export function correctCueDelayMs(hasWinner) {
-  return hasWinner ? CORRECT_CUE_DELAY_MS : 0;
+export function createCueSequencer() {
+  let tail = Promise.resolve();
+  let pending = 0;
+  const settled = () => {
+    pending -= 1;
+  };
+  return {
+    get busy() {
+      return pending > 0;
+    },
+    run(task) {
+      pending += 1;
+      // Chain on the previous tail so the next task starts only after this one
+      // settles. The `settled` handlers on BOTH branches keep a rejection from
+      // poisoning the chain: `tail` always ends up resolved.
+      const result = tail.then(() => task());
+      tail = result.then(settled, settled);
+      return result;
+    },
+  };
 }
 
 export function waitingCueIntervalMs(questionTimeLimitS) {
